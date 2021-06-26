@@ -7,10 +7,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import ir.ac.kntu.map.Map;
+import ir.ac.kntu.models.GameObject;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -29,13 +37,15 @@ public class JavaFxApplication extends Application {
         // } catch (Exception e) {
         //     e.printStackTrace();
         // }
+        // try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("test.map")))) {
+        //     Map m = (Map)in.readObject();
+        //     System.out.println(m.getStyle());
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
 
-        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("test.map")))) {
-            Map m = (Map)in.readObject();
-            System.out.println(m.getStyle());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //*========================================
+        //*========================================
 
         // Setting stage properties
         // stage.initStyle(StageStyle.UTILITY);
