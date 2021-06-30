@@ -3,7 +3,9 @@ import static ir.ac.kntu.Constants.*;
 import ir.ac.kntu.map.Map;
 import ir.ac.kntu.rigidbody.Position;
 import ir.ac.kntu.rigidbody.Vector;
+import javafx.animation.KeyFrame;
 import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
@@ -18,8 +20,17 @@ public class Player extends Sprite {
     // private Position nextGridPos;
     private int speed;
     private Pump pump;
+    private Timeline movation;
+    private Vector movement;
     public Player(Map map, int gridX, int gridY) {
         super(map, gridX, gridY, BLOCK_SCALE,BLOCK_SCALE,new ImageView("/assets/player.png"),PLAYER_GRID_CODE);
+        this.movation = new Timeline(new KeyFrame(Duration.millis(500), e->{
+            super.move(movement);
+            getMap().setData((int)this.getPosition().getX(), (int)this.getPosition().getY() ,0);
+            getMap().getGraphicsContext().setFill(Color.BLACK);
+            getMap().getGraphicsContext().fillRoundRect(this.getCurrentLayoutX(),getCurrentLayoutY(),this.getWidth(),this.getHeight(),3,3);
+        }));
+        this.movation.setCycleCount(1);
         this.speed = 1;
         // this.nextGridPos = new Position(gridX, gridY);
         // this.pump = new ImageView("/assets/pump.png");
@@ -33,7 +44,7 @@ public class Player extends Sprite {
         // this.getChildren().add(pump);
         // tt = new TranslateTransition(Duration.millis(1000),pump);
         // tt.setCycleCount(1);
-        this.lastPos = new Position(this.getGridPos());
+        this.lastPos = new Position(this.getPosition());
     }
     public void shoot() {
         // pump.setScaleX(1);
@@ -50,39 +61,8 @@ public class Player extends Sprite {
     private Position lastPos;
     @Override
     public void move(Vector movement) {
-        // moveX(movement.getX());
-        // moveY(movement.getY());
-        // if (this.pump.isActive()) {
-        //     return;
-        // }
-        int length = (int)movement.lenght();
-        while (length-->0) {
-            if (this.getGridPos().getX()%1 == 0 && this.getGridPos().getY()%1==0) {
-                // getMap().updateObjectPos(this, (int)lastPos.getX(), (int)lastPos.getY());
-                lastPos.setX(getGridX());
-                lastPos.setY(getGridY());
-                getMap().setData((int)lastPos.getX(), (int)lastPos.getY(), 0);
-            }
-            if (movement.getX() == 0 && movement.getY() != 0) {
-                if (this.getGridPos().getX()%1 == 0) {
-                    super.move(movement.getDirection());
-                } else {
-                    super.move(this.getDirection());
-                }
-            }
-            if (movement.getY() == 0 && movement.getX() !=0) {
-                if (this.getGridPos().getY()%1 == 0) {
-                    super.move(movement.getDirection());
-                } else {
-                    super.move(this.getDirection());
-                }
-            }
-        }
-        getMap().getGraphicsContext().setFill(Color.BLACK);
-        getMap().getGraphicsContext().fillRoundRect(this.getLayoutPos().getX(),this.getLayoutPos().getY(),this.getWidth(),this.getHeight(),10,10);
-
-        // getMap().getGraphicsContext().setFill(Color.BLUE);
-        // getMap().getGraphicsContext().fillRect(this.nextGridPos.getX(),this.nextGridPos.getY(),this.getWidth(),this.getHeight());
+        this.movement = movement;
+        movation.play();
     }
 
     public int getSpeed() {
@@ -91,69 +71,6 @@ public class Player extends Sprite {
     public void setSpeed(int speed) {
         this.speed = speed;
     }
-    // public void moveX(double dx) {
-    //     if (dx == 0) {
-    //         return;
-    //     }
-    //     if (getMap().layoutToGrid(this.getCurrentLayoutY()) == (int)nextGridPos.getY()) {
-    //         // double absoluteDelta = dx/Math.abs(dx);
-    //         double absoluteDelta = dx;
-    //         // if(this.getCurrentLayoutX() == getMap().gridToLayout((int)nextGridPos.getX())) {
-    //         if(getMap().layoutToGrid(this.getCurrentLayoutX()) == (int)nextGridPos.getX()) {
-    //             nextGridPos.move(absoluteDelta,0);
-    //         }
-    //         // if(((getMap().gridToLayout((int)(nextGridPos.getX())))-getCurrentLayoutX()) * dx < 0) {
-    //         if (this.getDirection().getY() * dx < 0) {
-    //             nextGridPos.move(absoluteDelta,0);
-    //         }
-    //         System.out.println(this.getGridPos());
-    //         System.out.println(this.getDirection());
-    //         // setCurrentLayoutX(getCurrentLayoutX() + absoluteDelta);
-    //     } else {
-    //         // double absoluteDelta = getMap().gridToLayout(nextGridPos.getY())-this.getCurrentLayoutY();
-    //         moveY(getDirection().getDirection().getY());
-    //         // moveY(getDirection().getDirection().getY()*Math.abs(dx));
-    //     }
-    // }
-    // public void moveY(double dy) {
-    //     if (dy == 0) {
-    //         return;
-    //     }
-    //     if (getMap().layoutToGrid(this.getCurrentLayoutX()) == (int)nextGridPos.getX()) {
-    //         double absoluteDelta = dy/Math.abs(dy);
-    //         // if(this.getCurrentLayoutX() == getMap().gridToLayout((int)nextGridPos.getX())) {
-    //         if(getMap().layoutToGrid(this.getCurrentLayoutY()) == (int)nextGridPos.getY()) {
-    //             nextGridPos.move(0,absoluteDelta);
-    //         }
-    //         if((getMap().gridToLayout((int)(nextGridPos.getY()))-getCurrentLayoutY()) * dy < 0) {
-    //             nextGridPos.move(0,absoluteDelta);
-    //         }
-    //         System.out.println(this.getGridPos());
-    //         System.out.println(this.getDirection());
-    //         // setCurrentLayoutX(getCurrentLayoutX() + absoluteDelta);
-    //     } else {
-    //         // double absoluteDelta = getMap().gridToLayout(nextGridPos.getY())-this.getCurrentLayoutY();
-    //         moveX(getDirection().getDirection().getX()*Math.abs(dy));
-    //     }
-    // }
-    // public void moveY(double dy) {
-    //     if (dy == 0){
-    //         return;
-    //     }
-    //     if (this.getCurrentLayoutX() == Map.gridToLayout(nextGridX)) {
-    //         int absoluteDelta = dy/Math.abs(dy);
-    //         if(this.getCurrentLayoutY() == Map.gridToLayout(nextGridY)) {
-    //             setCurrentGridY(nextGridY);
-    //             nextGridY+=absoluteDelta;
-    //         }
-    //         if((Map.gridToLayout(nextGridY)-getCurrentLayoutY()) * dy < 0) {
-    //             nextGridY+=absoluteDelta;
-    //         }
-    //         setCurrentLayoutY(getCurrentLayoutY() + absoluteDelta);
-    //     } else {
-    //         moveX(Map.gridToLayout(nextGridX)-this.getCurrentLayoutX());
-    //     }
-    // }
 
     @Override
     public void onCollision(GameObject collider) {

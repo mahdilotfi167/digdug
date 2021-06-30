@@ -28,27 +28,16 @@ public class Pump extends Object {
         circle = new Circle(this.getLayoutX(), this.getLayoutY(), 3, Color.RED);
         getChildren().add(circle);
     }
-
-    @Override
-    public void setCurrentLayoutX(double x) {
-        this.circle.setLayoutX(x);
-        super.setCurrentLayoutX(x);
-    }
-    @Override
-    public void setCurrentLayoutY(double y) {
-        this.circle.setLayoutY(y);
-        super.setCurrentLayoutY(y);
-    }
     private boolean isActive;
     // private Position pos = new Position(0,0);
     public void shoot(Position position,Vector direction) {
         circle.setVisible(true);
-        this.setCurrentLayoutX(position.getX());
-        this.setCurrentLayoutY(position.getY());
+        // this.setCurrentLayoutX(position.getX());
+        // this.setCurrentLayoutY(position.getY());
         Timeline tl = new Timeline(
             new KeyFrame(Duration.millis(10),e->{
-                setCurrentLayoutX(getCurrentLayoutX()+direction.getX());
-                setCurrentLayoutY(getCurrentLayoutY()+direction.getY());
+                // setCurrentLayoutX(getCurrentLayoutX()+direction.getX());
+                // setCurrentLayoutY(getCurrentLayoutY()+direction.getY());
             }) 
         );
         tl.setOnFinished(e -> {

@@ -95,11 +95,11 @@ public class Map extends Pane implements Serializable {
     public int layoutToGrid(double pos) {
         return (int)(pos/blockScale);
     }
-    public boolean contains(Position position,int width,int height) {
+    public boolean contains(Position position) {
         return position.getX() >= 0
             && position.getY() >= 0
-            && position.getX()+width <= grid[0].length*blockScale
-            && position.getY()+height <= grid.length*blockScale;
+            && position.getX() < grid[0].length
+            && position.getY() < grid.length;
     }
     public static Map load(String path) {
         return null;

@@ -71,7 +71,7 @@ public class PathFinder {
         while (openList.size() > 0) {
             current = popBackMin(totalCosts, openList);
             // System.out.println(current);
-            map.getChildren().add(new Circle(map.gridToLayout((int)current.getX()),map.gridToLayout((int)current.getY()),3,Color.CYAN));
+            // map.getChildren().add(new Circle(map.gridToLayout((int)current.getX()),map.gridToLayout((int)current.getY()),3,Color.CYAN));
             if ((int)current.getX()==(int)goal.getX() && (int)current.getY()==(int)goal.getY()){
                 return reconstructPath(cameFrom, current);
             }

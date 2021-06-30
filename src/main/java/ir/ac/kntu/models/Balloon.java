@@ -24,49 +24,44 @@ public class Balloon extends Sprite {
     private Player target;
 
     private Path currentPath;
+
+    private int counter = 0;
     @Override
     public void update() {
-        if (target != null) {
-            if (this.getGridPos().getX()%1==0 && this.getGridPos().getY()%1==0) {
-                PathFinder.Path p = this.pathFinder.find(this.getGridPos(), target.getGridPos());
-                System.out.println(p.lenght());
-                if (p.lenght() != 0) {
-                    currentPath = p;
-                    // currentPath.setStep(1);
+        if (counter++%15==0) {
+            if (target != null) {
+                Path p = pathFinder.find(this.getPosition(), target.getPosition());
+                if (p.lenght() > 0) {
+                    this.currentPath = p;
                     this.state = State.FOLLOW;
                 }
             }
-        }
-        switch (this.state) {
-            case ROAM:
+            switch (this.state) {
+                case ROAM:
                 roam();
                 break;
-            case FOLLOW:
+                case FOLLOW:
                 follow();
                 break;
-            default:
+                default:
                 break;
+            }
         }
     }
     private void roam() {
-        Position nextPos = this.getLayoutPos().sum(getDirection());
-        if (getMap().getData(getMap().layoutToGrid(nextPos.getX()),getMap().layoutToGrid(nextPos.getY())) != 0) {
+        Position nextPos = this.getPosition().sum(getDirection());
+        if (getMap().getData((int)nextPos.getX(),(int)nextPos.getY()) != 0) {
             this.move(getDirection().multiply(-1));
+        } else {
+            this.move(getDirection());
         }
-        this.move(getDirection());
     }
-    private int counter = BLOCK_SCALE-1;
     private void follow() {
-        if (counter == BLOCK_SCALE-1) {
-            if (currentPath.hasNext()) {
-                move(currentPath.next());
-                counter = 0;
-            } else {
-                this.state = State.ROAM;
-            }
+        if (currentPath.hasNext()) {
+            move(currentPath.next());
+        } else {
+            this.state = State.ROAM;
         }
-        move(getDirection());
-        counter++;
     }
 
     public void setTarget(Player target) {

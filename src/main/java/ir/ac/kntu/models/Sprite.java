@@ -19,18 +19,6 @@ public class Sprite extends GameObject {
     }
 
     @Override
-    public void setGridX(int gridX) {
-        super.setGridX(gridX);
-        this.spriteRenderer.play();
-    }
-
-    @Override
-    public void setGridY(int gridY) {
-        super.setGridY(gridY);
-        this.spriteRenderer.play();
-    }
-
-    @Override
     public void move(Vector movement) {
         if (movement.getX() < 0) {
             getMask().setScaleX(-1);
