@@ -26,6 +26,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -40,29 +41,32 @@ public class JavaFxApplication extends Application {
     public void start(Stage stage) throws Exception {
         // Pane root = new Pane();
         int[][] grid = {
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,2,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,0,0,0,0,5,0,0,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         };
         HashMap<Integer,GameObjectConstructor> constructors = new HashMap<>();
-        constructors.put(2, Player::new);
-        constructors.put(4, NormalBalloon::new);
-        constructors.put(5, DragonBalloon::new);
+        // constructors.put(2, Player::new);
+        // constructors.put(4, NormalBalloon::new);
+        // constructors.put(5, DragonBalloon::new);
         
         HashMap<Integer,Color> fillers = new HashMap<>();
         fillers.put(1, Color.rgb(214, 200, 49));
@@ -74,7 +78,8 @@ public class JavaFxApplication extends Application {
             // System.out.println(p.next());
         // }
         // root.setStyle("-fx-border-width: 0 0 5 0;-fx-background-color:black");
-        Scene scene = new Scene(root, 800, 600, Color.rgb(240, 240, 240));
+        // GridPane gp = new GridPane();
+        // Scene scene = new Scene(root, 800, 600, Color.rgb(240, 240, 240));
         // try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File("test.map")))) {
         //     out.writeObject(root);
         // } catch (Exception e) {
@@ -88,27 +93,30 @@ public class JavaFxApplication extends Application {
         // }
         // Player p2 = (Player)root.getObject(1, 1);
         // scene.setOnKeyPressed(player::keyHandler);
-        Player player = (Player)root.getObject(2, 2);
-        DragonBalloon db = (DragonBalloon)root.getObject(13, 5);
+        Player player = new Player(root,10, 9);
+        root.addObject(player);
+
+        DragonBalloon db = new DragonBalloon(root, 17, 2);
+        root.addObject(db);
         db.setTarget(player);
         PlayerController pc = new PlayerController(player, KeyCode.UP ,KeyCode.RIGHT ,KeyCode.DOWN,KeyCode.LEFT, KeyCode.SPACE);
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, pc::keyHandler);
+        // scene.addEventHandler(KeyEvent.KEY_PRESSED, pc::keyHandler);
 
-        scene.setOnMouseClicked(e->{
-            root.printGrid();
-        });
+        // scene.setOnMouseClicked(e->{
+            // root.printGrid();
+        // });
         GameObject.startLoop();
         // PlayerController pc2 = new PlayerController(p2, KeyCode.W ,KeyCode.D ,KeyCode.S,KeyCode.A, KeyCode.ENTER);
         // scene.setOnKeyPressed(pc::keyHandler);
         // scene.addEventHandler(KeyEvent.KEY_PRESSED, pc2::keyHandler);
         //*========================================
         //*========================================
-
+        MenuHandler mh = new MenuHandler(stage);
         // Setting stage properties
         // stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("DigDig");
         
-        stage.setScene(scene);
+        // stage.setScene(scene);
         stage.show();
         // stage.setOnCloseRequest(e->{
             // System.exit(0);

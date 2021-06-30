@@ -79,7 +79,7 @@ public class PathFinder {
             opened[(int)current.getY()][(int)current.getX()] = false;
             for (Vector direction : directions) {
                 neighbor = current.sum(direction);
-                if (map.getData((int)neighbor.getX(), (int)neighbor.getY()) != 0 || closed[(int)neighbor.getY()][(int)neighbor.getX()]) {
+                if (!map.isBlock((int)neighbor.getX(), (int)neighbor.getY()) || closed[(int)neighbor.getY()][(int)neighbor.getX()]) {
                     continue;
                 }
                 tentative = currentCosts.get(current) + 1;

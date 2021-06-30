@@ -1,0 +1,27 @@
+@font-face {
+    src: url("./../font/Moon-Light.otf");
+}
+.button {
+    -fx-font-family:"Moon";
+    -fx-font-weight:bold;
+    -fx-font-size:28px;
+    -fx-background-color:#326AAB;
+    -fx-text-fill:#ffffff;
+    -fx-background-radius:12;
+}
+.button:hover {
+    -fx-font-family:"Moon";
+    -fx-font-weight:bold;
+    -fx-font-size:32px;
+    -fx-background-color:#326AAB;
+    -fx-text-fill:#ffffff;
+    -fx-background-radius:12;
+}
+.text-field {
+    -fx-font-size:26px;
+    -fx-alignment: center;
+}
+.list-view {
+    -fx-font-size:20px;
+    -fx-alignment: center;
+}

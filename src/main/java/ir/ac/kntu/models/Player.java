@@ -24,11 +24,9 @@ public class Player extends Sprite {
     private Vector movement;
     public Player(Map map, int gridX, int gridY) {
         super(map, gridX, gridY, BLOCK_SCALE,BLOCK_SCALE,new ImageView("/assets/player.png"),PLAYER_GRID_CODE);
-        this.movation = new Timeline(new KeyFrame(Duration.millis(500), e->{
+        this.movation = new Timeline(new KeyFrame(Duration.millis(150), e->{
             super.move(movement);
-            getMap().setData((int)this.getPosition().getX(), (int)this.getPosition().getY() ,0);
-            getMap().getGraphicsContext().setFill(Color.BLACK);
-            getMap().getGraphicsContext().fillRoundRect(this.getCurrentLayoutX(),getCurrentLayoutY(),this.getWidth(),this.getHeight(),3,3);
+            getMap().clearBlock((int)this.getPosition().getX(), (int)this.getPosition().getY());
         }));
         this.movation.setCycleCount(1);
         this.speed = 1;
