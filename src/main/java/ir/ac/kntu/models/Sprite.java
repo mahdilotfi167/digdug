@@ -8,19 +8,12 @@ import javafx.util.Duration;
 
 public class Sprite extends GameObject {
 
-    ImageView spriteSheet;
     SpriteRenderer spriteRenderer;
 
-    public Sprite(Map map, int gridX, int gridY, int width, int height, String spriteSheetPath, int gridCode) {
-        super(map, gridX, gridY, width, height, gridCode);
-        this.spriteSheet = new ImageView(spriteSheetPath);
-        this.spriteSheet.setLayoutX(getCurrentLayoutX());
-        this.spriteSheet.setLayoutY(getCurrentLayoutY());
-        this.spriteSheet.setFitWidth(width);
-        this.spriteSheet.setFitHeight(height);
-        getChildren().add(this.spriteSheet);
-        spriteRenderer = new SpriteRenderer(this.spriteSheet, Duration.millis(100), 2, 1, 0, 0,
-                (int) spriteSheet.getImage().getWidth(), (int) spriteSheet.getImage().getHeight() / 2);
+    public Sprite(Map map, int gridX, int gridY, int width, int height, ImageView spriteSheet, int gridCode) {
+        super(map, gridX, gridY, width, height, gridCode, spriteSheet);
+        spriteRenderer = new SpriteRenderer(this.getMask(), Duration.millis(100), 2, 1, 0, 0,
+                (int) this.getMask().getImage().getWidth(), (int) getMask().getImage().getHeight() / 2);
         spriteRenderer.setCycleCount(1);
         spriteRenderer.play();
     }
@@ -28,29 +21,28 @@ public class Sprite extends GameObject {
     @Override
     public void setGridX(int gridX) {
         super.setGridX(gridX);
-        this.spriteSheet.setLayoutX(getCurrentLayoutX());
         this.spriteRenderer.play();
     }
 
     @Override
     public void setGridY(int gridY) {
         super.setGridY(gridY);
-        this.spriteSheet.setLayoutY(getCurrentLayoutY());
         this.spriteRenderer.play();
     }
 
     @Override
     public void move(Vector movement) {
         if (movement.getX() < 0) {
-            spriteSheet.setScaleX(-1);
-            spriteSheet.setRotate(0);
+            getMask().setScaleX(-1);
+            getMask().setRotate(0);
         } else {
-            spriteSheet.setScaleX(1);
-            spriteSheet.setRotate(movement.getRotation());
+            getMask().setScaleX(1);
+            getMask().setRotate(movement.getRotation());
         }
         super.move(movement);
         spriteRenderer.play();
-        spriteSheet.setLayoutX(this.getCurrentLayoutX());
-        spriteSheet.setLayoutY(this.getCurrentLayoutY());
+    }
+    public SpriteRenderer getSpriteRenderer() {
+        return spriteRenderer;
     }
 }

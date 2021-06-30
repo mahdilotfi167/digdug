@@ -46,4 +46,8 @@ public class SpriteRenderer extends Transition {
             lastIndex = index;
         }
     }
+
+    public void setDuration(Duration duration) {
+        setCycleDuration(duration);
+    }
 }

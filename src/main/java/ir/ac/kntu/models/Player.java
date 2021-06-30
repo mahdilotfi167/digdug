@@ -5,6 +5,7 @@ import ir.ac.kntu.rigidbody.Position;
 import ir.ac.kntu.rigidbody.Vector;
 import javafx.animation.ScaleTransition;
 import javafx.animation.TranslateTransition;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -12,44 +13,56 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 public class Player extends Sprite {
-    ImageView pump;
-    ScaleTransition st;
-    TranslateTransition tt;
-    private Position nextGridPos;
+    // ScaleTransition st;
+    // TranslateTransition tt;
+    // private Position nextGridPos;
     private int speed;
+    private Pump pump;
     public Player(Map map, int gridX, int gridY) {
-        super(map, gridX, gridY, BLOCK_SCALE,BLOCK_SCALE,"/assets/player.png",PLAYER_GRID_CODE);
+        super(map, gridX, gridY, BLOCK_SCALE,BLOCK_SCALE,new ImageView("/assets/player.png"),PLAYER_GRID_CODE);
         this.speed = 1;
-        this.nextGridPos = new Position(gridX, gridY);
-        this.pump = new ImageView("/assets/pump.png");
-        this.st = new ScaleTransition(Duration.millis(1000), pump);
-        pump.setFitWidth(BLOCK_SCALE);
-        pump.setFitHeight(BLOCK_SCALE);
-        this.st.setCycleCount(1);
-        st.setByX(3);
-        this.pump.setVisible(false);
-        this.getChildren().add(pump);
-        tt = new TranslateTransition(Duration.millis(1000),pump);
-        tt.setCycleCount(1);
+        // this.nextGridPos = new Position(gridX, gridY);
+        // this.pump = new ImageView("/assets/pump.png");
+        // this.st = new ScaleTransition(Duration.millis(1000), pump);
+        // pump.setFitWidth(BLOCK_SCALE);
+        // pump.setFitHeight(BLOCK_SCALE);
+        // this.st.setCycleCount(1);
+        // st.setByX(3);
+        this.pump = new Pump(getMap(), 3, 3);
+        // this.pump.setVisible(false);
+        // this.getChildren().add(pump);
+        // tt = new TranslateTransition(Duration.millis(1000),pump);
+        // tt.setCycleCount(1);
+        this.lastPos = new Position(this.getGridPos());
     }
     public void shoot() {
-        pump.setScaleX(1);
-        pump.setVisible(true);
-        Position p = new Position(getLayoutCenterX(), getLayoutCenterY()).sum(getDirection().getDirection(BLOCK_SCALE));
-        pump.setLayoutX(p.getX()-BLOCK_SCALE/2);
-        pump.setLayoutY(p.getY()-BLOCK_SCALE/2);
-        pump.setRotate(getDirection().getRotation());
-        
-        pump.setVisible(false);
+        // pump.setScaleX(1);
+        // pump.setVisible(true);
+        // Position p = new Position(getLayoutCenterX(), getLayoutCenterY()).sum(getDirection().getDirection(BLOCK_SCALE));
+        // Rectangle2D collider = new Rectangle2D(p.getX()-BLOCK_SCALE/2, p.getY()-BLOCK_SCALE/2, arg2, arg3)
+        // pump.setLayoutX(p.getX()-BLOCK_SCALE/2);
+        // pump.setLayoutY(p.getY()-BLOCK_SCALE/2);
+        // pump.setRotate(getDirection().getRotation());
+        pump.shoot(this.getCenterPos().sum(getDirection().getDirection(BLOCK_SCALE)), getDirection());
+        // pump.setVisible(false);
 
     }
-
+    private Position lastPos;
     @Override
     public void move(Vector movement) {
         // moveX(movement.getX());
         // moveY(movement.getY());
+        // if (this.pump.isActive()) {
+        //     return;
+        // }
         int length = (int)movement.lenght();
         while (length-->0) {
+            if (this.getGridPos().getX()%1 == 0 && this.getGridPos().getY()%1==0) {
+                // getMap().updateObjectPos(this, (int)lastPos.getX(), (int)lastPos.getY());
+                lastPos.setX(getGridX());
+                lastPos.setY(getGridY());
+                getMap().setData((int)lastPos.getX(), (int)lastPos.getY(), 0);
+            }
             if (movement.getX() == 0 && movement.getY() != 0) {
                 if (this.getGridPos().getX()%1 == 0) {
                     super.move(movement.getDirection());
@@ -67,6 +80,7 @@ public class Player extends Sprite {
         }
         getMap().getGraphicsContext().setFill(Color.BLACK);
         getMap().getGraphicsContext().fillRoundRect(this.getLayoutPos().getX(),this.getLayoutPos().getY(),this.getWidth(),this.getHeight(),10,10);
+
         // getMap().getGraphicsContext().setFill(Color.BLUE);
         // getMap().getGraphicsContext().fillRect(this.nextGridPos.getX(),this.nextGridPos.getY(),this.getWidth(),this.getHeight());
     }
@@ -140,4 +154,9 @@ public class Player extends Sprite {
     //         moveX(Map.gridToLayout(nextGridX)-this.getCurrentLayoutX());
     //     }
     // }
+
+    @Override
+    public void onCollision(GameObject collider) {
+        System.out.println(collider.getClass().getName());
+    }
 }
