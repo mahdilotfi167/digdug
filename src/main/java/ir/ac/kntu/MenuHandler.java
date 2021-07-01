@@ -1,5 +1,14 @@
 package ir.ac.kntu;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import ir.ac.kntu.data.Person;
+import ir.ac.kntu.data.PersonDao;
+import ir.ac.kntu.data.SerializedPersonDao;
+import ir.ac.kntu.map.MapBuilder;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -8,8 +17,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -19,11 +32,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class MenuHandler {
-    Stage stage;
-    Scene scene;
+    private Stage stage;
+    private Scene scene;
+    private PersonDao dao;
     // private GridPane customMenu = new GridPane();
     private GridPane mainMenu = new GridPane();
     public MenuHandler(Stage stage) {
+        this.dao = new SerializedPersonDao("persons");
         this.stage = stage;
         this.scene = new Scene(mainMenu);
         this.stage.setScene(this.scene);
@@ -116,16 +131,41 @@ public class MenuHandler {
     private void drawArcadeMenu() {
         GridPane arcade = getSubGrid();
         this.scene.setRoot(arcade);
-        ListView<Text> lv = new ListView<>();
+        // ListView<Text> lv = new ListView<>();
+        TableView<Person> lv = new TableView<>();
         lv.setPrefHeight(573);
         lv.setPrefWidth(337);
+        lv.setStyle("-fx-background-color: #BECBDE;");
+        TableColumn<Person,String> tc1 = new TableColumn<>("Name");
+        tc1.setPrefWidth(223);
+        tc1.setStyle("-fx-font-size: 18px;");
+        tc1.setCellValueFactory(new PropertyValueFactory<>("name"));
+        TableColumn<Person,Integer> tc2 = new TableColumn<>("Record");
+        tc2.setPrefWidth(112);
+        tc2.setStyle("-fx-font-size: 18px;");
+        tc2.setCellValueFactory(new PropertyValueFactory<>("hiScore"));
+        lv.getColumns().add(tc1);
+        lv.getColumns().add(tc2);
+        List<Person> persons = dao.all();
+        Collections.sort(persons);
+        lv.getItems().addAll(persons);
+        lv.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent e) {
+                new Engine();
+            }
+        });
         VBox box = new VBox();
         TextField tf = new TextField();
         tf.setPrefHeight(49);
         tf.setPrefWidth(297);
         tf.setPromptText("Enter name");
         tf.getStylesheets().add("/css/main.css");
-        Button add = getButton("Add", e->{});
+        Button add = getButton("Add", e->{
+            Person p = new Person(tf.getText(), 0);
+            saveNew(p);
+            lv.getItems().add(p);
+        });
         Button back = getButton("Back", e->{drawMainMenu();});
         box.setAlignment(Pos.CENTER);
         box.getChildren().add(tf);
@@ -135,7 +175,10 @@ public class MenuHandler {
         VBox.setMargin(back, new Insets(20, 0, 20, 0));
         arcade.add(lv, 0, 0);
         arcade.add(box, 1, 0);
-    } 
+    }
+    private void saveNew(Person person) {
+        this.dao.add(person);
+    }
     private void drawBuildMenu() {
         GridPane build = getSubGrid();
         this.scene.setRoot(build);
@@ -154,7 +197,7 @@ public class MenuHandler {
 
         VBox box2 = new VBox();
         box2.setAlignment(Pos.CENTER);
-        Button add = getButton("New map", e->{});
+        Button add = getButton("New map", e->{new MapBuilder();});
         Button play = getButton("Play", e->{});
         Button back = getButton("Back", e->{drawMainMenu();});
         box2.getChildren().add(add);
