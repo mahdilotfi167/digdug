@@ -5,11 +5,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import ir.ac.kntu.components.PathFinder;
 import ir.ac.kntu.components.PlayerController;
+import ir.ac.kntu.data.MapSerializer;
 import ir.ac.kntu.map.Map;
+import ir.ac.kntu.models.Balloon;
 import ir.ac.kntu.models.DragonBalloon;
 import ir.ac.kntu.models.GameObject;
 import ir.ac.kntu.models.NormalBalloon;
@@ -43,73 +46,53 @@ public class JavaFxApplication extends Application {
         int[][] grid = {
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,32,0,0,0,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,0,0,0,0,8,0,0,0,1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+        {1,0,0,0,16,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
         };
-        HashMap<Integer,GameObjectConstructor> constructors = new HashMap<>();
-        // constructors.put(2, Player::new);
-        // constructors.put(4, NormalBalloon::new);
-        // constructors.put(5, DragonBalloon::new);
+        // HashMap<Integer,GameObjectConstructor> constructors = new HashMap<>();
+        // constructors.put(PLAYER_GRID_CODE, Player::new);
+        // constructors.put(NORMAL_BALLOON_GRID_CODE, NormalBalloon::new);
+        // constructors.put(DRAGON_BALLOON_GRID_CODE, DragonBalloon::new);
+    
+        Map root = new Map(grid,CONSTRUCTORS,FILLERS,BLOCK_SCALE,Color.BLACK);
+        Scene scene = new Scene(root, 800, 600, Color.rgb(240, 240, 240));
+        // Player player = root.collect(Player.class).get(0);
         
-        HashMap<Integer,Color> fillers = new HashMap<>();
-        fillers.put(1, Color.rgb(214, 200, 49));
-        Map root = new Map(grid,constructors,fillers,BLOCK_SCALE,Color.BLACK);
-        // PathFinder pathFinder = new PathFinder(root);
-        // PathFinder.Path p = pathFinder.find(new Position(2, 2), new Position(12, 5));
-        // System.out.println(p.lenght());
-        // while(p.hasNext()) {
-            // System.out.println(p.next());
-        // }
-        // root.setStyle("-fx-border-width: 0 0 5 0;-fx-background-color:black");
-        // GridPane gp = new GridPane();
-        // Scene scene = new Scene(root, 800, 600, Color.rgb(240, 240, 240));
-        // try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(new File("test.map")))) {
-        //     out.writeObject(root);
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
-        // try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("test.map")))) {
-        //     Map m = (Map)in.readObject();
-        //     System.out.println(m.getStyle());
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
-        // Player p2 = (Player)root.getObject(1, 1);
-        // scene.setOnKeyPressed(player::keyHandler);
-        Player player = new Player(root,10, 9);
-        root.addObject(player);
+        ArrayList<Balloon> balloons = new ArrayList<>();
+        // balloons.addAll(root.collect(DragonBalloon.class));
+        // balloons.addAll(root.collect(NormalBalloon.class));
 
-        DragonBalloon db = new DragonBalloon(root, 17, 2);
-        root.addObject(db);
-        db.setTarget(player);
-        PlayerController pc = new PlayerController(player, KeyCode.UP ,KeyCode.RIGHT ,KeyCode.DOWN,KeyCode.LEFT, KeyCode.SPACE);
+        // for (Balloon balloon : balloons) {
+            // balloon.setTarget(player);
+        // }
+
+        // PlayerController pc = new PlayerController(player, KeyCode.UP ,KeyCode.RIGHT ,KeyCode.DOWN,KeyCode.LEFT, KeyCode.SPACE);
         // scene.addEventHandler(KeyEvent.KEY_PRESSED, pc::keyHandler);
-
-        // scene.setOnMouseClicked(e->{
-            // root.printGrid();
-        // });
-        GameObject.startLoop();
-        // PlayerController pc2 = new PlayerController(p2, KeyCode.W ,KeyCode.D ,KeyCode.S,KeyCode.A, KeyCode.ENTER);
-        // scene.setOnKeyPressed(pc::keyHandler);
-        // scene.addEventHandler(KeyEvent.KEY_PRESSED, pc2::keyHandler);
+        // ArrayList<DragonBalloon> res = root.collect(DragonBalloon.class);
+        // System.out.println(res);
+        scene.setOnMouseClicked(e->{
+            root.printGrid();
+        });
+        // MapSerializer.export(root);
+        // GameObject.startLoop();
         //*========================================
+        // MapSerializer.load();
         //*========================================
         MenuHandler mh = new MenuHandler(stage);
         // Setting stage properties
