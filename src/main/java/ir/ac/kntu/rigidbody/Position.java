@@ -26,41 +26,38 @@ public class Position {
     }
 
     public void move(Vector v) {
+        this.x += v.getX();
+        this.y += v.getY();
         if (xListeners != null){
             for (ChangeListener<Double> listener : xListeners) {
-                listener.onChange(x, x+v.getX());
+                listener.onChange(x-v.getX(), x);
             }
         }
         if (yListeners != null){
             for (ChangeListener<Double> listener : yListeners) {
-                listener.onChange(y, y+v.getY());
+                listener.onChange(y-v.getY(), y);
             }
         }
-        this.x += v.getX();
-        this.y += v.getY();
-    }
-
-    public void move(double dx, double dy) {
-        this.x += dx;
-        this.y += dy;
     }
 
     public void setX(double x) {
+        double old = this.x;
+        this.x = x;
         if (this.xListeners != null) {
             for (ChangeListener<Double> listener : xListeners) {
-                listener.onChange(this.x, x);
+                listener.onChange(old, x);
             }
         }
-        this.x = x;
     }
 
     public void setY(double y) {
+        double old = this.y;
+        this.y = y;
         if (this.yListeners != null) {
             for (ChangeListener<Double> listener : yListeners) {
-                listener.onChange(this.y, y);
+                listener.onChange(old, y);
             }
         }
-        this.y = y;
     }
 
     public double getX() {
