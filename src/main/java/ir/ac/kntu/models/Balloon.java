@@ -53,7 +53,7 @@ public class Balloon extends Sprite {
 
     private void roam() {
         Position nextPos = this.getPosition().sum(getDirection());
-        if (!getMap().isBlock((int) nextPos.getX(), (int) nextPos.getY())) {
+        if (getMap().isBlock((int) nextPos.getX(), (int) nextPos.getY())) {
             this.move(getDirection().multiply(-1));
         } else {
             this.move(getDirection());

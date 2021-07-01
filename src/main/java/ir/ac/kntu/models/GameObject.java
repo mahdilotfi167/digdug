@@ -56,23 +56,32 @@ public abstract class GameObject extends Parent implements Serializable {
         this.width = width;
         this.height = height;
         this.map = map;
+        this.gridCode = gridCode;
         this.direction = new Vector(1, 0);
         this.mask = mask;
-        this.mask.setLayoutX(0);
-        this.mask.setLayoutY(0);
+        // this.mask.setLayoutX(0);
+        // this.mask.setLayoutY(0);
         this.mask.setFitWidth(width);
         this.mask.setFitHeight(height);
         getChildren().add(mask);
 
         position.addXListener((oldval, newval) -> {
             this.setLayoutX(getMap().gridToLayout(newval.intValue()));
-            this.mask.setLayoutX(0);
+            // this.mask.setLayoutX(0);
+            getMap().updateObjectPos(this, oldval.intValue(), this.getGridY());
         });
         position.addYListener((oldval, newval) -> {
             this.setLayoutY(getMap().gridToLayout(newval.intValue()));
-            this.mask.setLayoutY(0);
+            // this.mask.setLayoutY(0);
+            getMap().updateObjectPos(this, this.getGridX(), oldval.intValue());
         });
+        this.position.setX(gridX);
+        this.position.setY(gridY);
     }
+
+    // protected void setX() {
+
+    // }
 
     public double getCurrentLayoutX() {
         return getMap().gridToLayout((int) this.position.getX());
@@ -103,7 +112,7 @@ public abstract class GameObject extends Parent implements Serializable {
     }
 
     public int getGridCode() {
-        return gridCode;
+        return this.gridCode;
     }
 
     public Map getMap() {
