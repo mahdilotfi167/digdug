@@ -8,8 +8,8 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
+import ir.ac.kntu.core.GameObjectConstructor;
 import ir.ac.kntu.core.Map;
-import ir.ac.kntu.utils.GameObjectConstructor;
 import javafx.scene.paint.Color;
 
 public class MapSerializer {

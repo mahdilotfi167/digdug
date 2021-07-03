@@ -1,9 +1,11 @@
 package ir.ac.kntu;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ir.ac.kntu.data.MapSerializer;
 import ir.ac.kntu.data.Person;
@@ -22,6 +24,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
@@ -154,7 +157,7 @@ public class MenuHandler {
         lv.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent e) {
-                new Engine(new MapSerializer("map/arcade/1").load(CONSTRUCTORS, FILLERS, BLOCK_SCALE ,Color.BLACK));
+                new Engine(new MapSerializer("src/main/resources/map/arcade/1").load(CONSTRUCTORS, FILLERS, BLOCK_SCALE ,Color.BLACK));
             }
         });
         VBox box = new VBox();
@@ -181,7 +184,15 @@ public class MenuHandler {
     private void saveNew(Person person) {
         this.dao.add(person);
     }
+    private List<Image> images;
+    private List<String> filenumbers;
+    private int imageIndex;
     private void drawBuildMenu() {
+        filenumbers = getImages();
+        images = filenumbers.stream()
+        .map(filenumber->new Image("/map/custom/"+filenumber+".png"))//todo bug
+        .collect(Collectors.toList());
+        imageIndex = 100*images.size();
         GridPane build = getSubGrid();
         this.scene.setRoot(build);
         VBox box1 = new VBox();
@@ -191,8 +202,9 @@ public class MenuHandler {
         img.setFitWidth(335);
         img.setPickOnBounds(true);
         img.setPreserveRatio(true);
-        Button next = getButton("Next", e->{});
-        Button prev = getButton("Prev", e->{});
+        img.setImage(images.get(imageIndex%images.size()));
+        Button next = getButton("Next", e->{img.setImage(images.get(++imageIndex%images.size()));});
+        Button prev = getButton("Prev", e->{img.setImage(images.get(--imageIndex%images.size()));});
         box1.getChildren().add(next);
         box1.getChildren().add(img);
         box1.getChildren().add(prev);
@@ -200,7 +212,10 @@ public class MenuHandler {
         VBox box2 = new VBox();
         box2.setAlignment(Pos.CENTER);
         Button add = getButton("New map", e->{new MapBuilder();});
-        Button play = getButton("Play", e->{});
+        Button play = getButton("Play", e->{
+            new Engine(new MapSerializer("src/main/resources/map/custom/"+filenumbers.get(imageIndex%images.size())).load(CONSTRUCTORS, FILLERS, BLOCK_SCALE ,Color.BLACK));
+            // System.out.println(images.get(imageIndex%images.size()).getUrl());
+        });
         Button back = getButton("Back", e->{drawMainMenu();});
         box2.getChildren().add(add);
         box2.getChildren().add(play);
@@ -209,5 +224,16 @@ public class MenuHandler {
 
         build.add(box1, 0, 0);
         build.add(box2, 1, 0);
+    }
+
+    private List<String> getImages() {
+        File folder = new File("src/main/resources/map/custom/");
+        if (folder == null || folder.list()==null) {
+            return new ArrayList<>();
+        }
+        return List.of(folder.list()).stream()
+            .filter(filename->filename.endsWith(".png"))
+            .map(filename->filename.replaceAll(".png", ""))
+            .collect(Collectors.toList());
     }
 }

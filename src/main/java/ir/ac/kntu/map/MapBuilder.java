@@ -21,10 +21,10 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import ir.ac.kntu.core.GameObject;
+import ir.ac.kntu.core.GameObjectConstructor;
 import ir.ac.kntu.core.Map;
 import ir.ac.kntu.data.MapSerializer;
 import ir.ac.kntu.models.Draggable;
-import ir.ac.kntu.utils.GameObjectConstructor;
 
 public class MapBuilder extends Pane {
     private Map map;
@@ -57,18 +57,18 @@ public class MapBuilder extends Pane {
             Platform.runLater(()->{
                 int lastname = getLastId()+1;    
                 try {
-                    File file = new File("map/custom/"+lastname+".png");
+                    File file = new File("src/main/resources/map/custom/"+lastname+".png");
                     file.getParentFile().mkdirs();
                     ImageIO.write(SwingFXUtils.fromFXImage(map.snapshot(new SnapshotParameters(), null), null), "png", file);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
-                new MapSerializer("map/custom/"+lastname).export(this.map);
+                new MapSerializer("src/main/resources/map/custom/"+lastname).export(this.map);
             });
         });
     }
     private int getLastId() {
-        File folder = new File("map/custom/");
+        File folder = new File("src/main/resources/map/custom/");
         if (folder == null || folder.list()==null) {
             return 1;
         }
