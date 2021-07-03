@@ -2,10 +2,11 @@ package ir.ac.kntu;
 
 import java.util.HashMap;
 
+import ir.ac.kntu.core.GameObjectConstructor;
 import ir.ac.kntu.models.DragonBalloon;
 import ir.ac.kntu.models.NormalBalloon;
 import ir.ac.kntu.models.Player;
-import ir.ac.kntu.utils.GameObjectConstructor;
+import ir.ac.kntu.models.Stone;
 import javafx.scene.paint.Color;
 
 public class Constants {
@@ -30,6 +31,7 @@ public class Constants {
         CONSTRUCTORS.put(PLAYER_GRID_CODE, Player::new);
         CONSTRUCTORS.put(NORMAL_BALLOON_GRID_CODE, NormalBalloon::new);
         CONSTRUCTORS.put(DRAGON_BALLOON_GRID_CODE, DragonBalloon::new);
+        CONSTRUCTORS.put(STONE_GRID_CODE, Stone::new);
 
         FILLERS.put(YELLO_WALL_GRID_CODE, Color.rgb(214, 200, 49));
         FILLERS.put(RED_WALL_GRID_CODE, Color.rgb(191, 95, 71));

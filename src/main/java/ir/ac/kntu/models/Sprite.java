@@ -21,17 +21,29 @@ public class Sprite extends GameObject {
 
     @Override
     public void move(Vector movement) {
-        if (movement.getX() < 0) {
-            getMask().setScaleX(-1);
-            getMask().setRotate(0);
-        } else {
-            getMask().setScaleX(1);
-            getMask().setRotate(movement.getRotation());
-        }
+        // if (movement.getX() < 0) {
+        //     getMask().setScaleX(-1);
+        //     getMask().setRotate(0);
+        // } else {
+        //     getMask().setScaleX(1);
+        //     getMask().setRotate(movement.getRotation());
+        // }
+        setDirection(movement.getDirection());
         super.move(movement);
         spriteRenderer.play();
     }
     public SpriteRenderer getSpriteRenderer() {
         return spriteRenderer;
+    }
+
+    @Override
+    public void setDirection(Vector direction) {
+        if (direction.getX() < 0) {
+            getMask().setScaleX(-1);
+            getMask().setRotate(0);
+        } else {
+            getMask().setScaleX(1);
+            getMask().setRotate(direction.getRotation());
+        }
     }
 }
