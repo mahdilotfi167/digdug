@@ -1,4 +1,4 @@
-package ir.ac.kntu.rigidbody;
+package ir.ac.kntu.core.rigidbody;
 
 public class Vector {
     private double x;

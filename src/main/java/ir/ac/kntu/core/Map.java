@@ -1,25 +1,23 @@
-package ir.ac.kntu.map;
+package ir.ac.kntu.core;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
-
-import ir.ac.kntu.models.Draggable;
-import ir.ac.kntu.models.GameObject;
-import ir.ac.kntu.models.Player;
-import ir.ac.kntu.rigidbody.Position;
-import ir.ac.kntu.util.GameObjectConstructor;
+import ir.ac.kntu.core.rigidbody.Position;
+import ir.ac.kntu.utils.GameObjectConstructor;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 /**
- * a tool for rendering game maps
+ * A micro tool for rendering game maps using javafx panes
+ * @author Mahdi Lotfi
  */
-public class Map extends Pane implements Serializable {
+public class Map extends Pane {
     private int[][] grid;
-    // private GameObject[][] pointers;
     private HashMap<Integer,GameObjectConstructor> constructors;
     private HashMap<Integer,Color> fillers;
     private ArrayList<GameObject> pointers;
@@ -29,7 +27,6 @@ public class Map extends Pane implements Serializable {
     public Map(int[][] gridCodes,HashMap<Integer,GameObjectConstructor> constructors,HashMap<Integer,Color> fillers,int blockScale,Color background) {
         this.blockScale = blockScale;
         this.grid = gridCodes.clone();
-        // this.pointers = new GameObject[grid.length][grid[0].length];
         this.constructors = constructors;
         this.fillers = fillers;
         this.fillSet = fillers.entrySet();
@@ -41,7 +38,23 @@ public class Map extends Pane implements Serializable {
         graphicsContext.fillRect(0, 0, grid[0].length*blockScale, grid.length*blockScale);
         this.setPrefWidth(grid[0].length*blockScale);
         this.setPrefHeight(grid.length*blockScale);
+        
+        
+        collisionChecker = new Timeline();
+        collisionChecker.getKeyFrames().add(new KeyFrame(Duration.millis(40), e -> {
+            for (int i = 0; i < pointers.size(); i++) {
+                pointers.get(i).update();
+                for (int j = i+1; j < pointers.size(); j++) {
+                    if (pointers.get(i).getPosition().equals(pointers.get(j).getPosition())) {
+                        pointers.get(i).onCollision(pointers.get(j));
+                        pointers.get(j).onCollision(pointers.get(i));
+                    }
+                }
+            }
+        }));
         render();
+
+
     }
     
     private void render() {
@@ -65,9 +78,6 @@ public class Map extends Pane implements Serializable {
                             pointers.add(gameObject);
                         }
                     }
-                    // gameObject = goc.getObject(this, j, i);
-                    // pointers[i][j] = gameObject;
-                    // getChildren().add(gameObject);
                 }
             }
         }
@@ -94,6 +104,12 @@ public class Map extends Pane implements Serializable {
         // getChildren().remove(pastObject);
         // grid[gameObject.getGridY()][gameObject.getGridX()] = gameObject.getGridCode();
         // pointers[gameObject.getGridY()][gameObject.getGridX()] = gameObject;
+    }
+
+    public void removeObject(GameObject gameObject) {
+        this.pointers.remove(gameObject);
+        this.getChildren().remove(gameObject);
+        grid[gameObject.getGridY()][gameObject.getGridX()]-=gameObject.getGridCode();
     }
 
     public void fill(int colorCode,int x,int y) {
@@ -184,5 +200,26 @@ public class Map extends Pane implements Serializable {
         this.pointers.add(go);
         this.getChildren().add(go);
         this.grid[go.getGridY()][go.getGridX()] += go.getGridCode();
+    }
+    private Timeline collisionChecker;
+
+    public ArrayList<Position> getFreePoints() {
+        ArrayList<Position> res = new ArrayList<>();
+        for (int i = 0;i<grid.length;i++) {
+            for (int j = 0;j<grid[0].length;j++) {
+                if (!isBlock(j, i)) {
+                    res.add(new Position(j,i));
+                }
+            }
+        }
+        return res;
+    }
+
+    public void startLoop() {
+        collisionChecker.setCycleCount(Timeline.INDEFINITE);
+        collisionChecker.play();
+    }
+    public void stopLoop() {
+        collisionChecker.stop();
     }
 }

@@ -1,4 +1,4 @@
-package ir.ac.kntu.util;
+package ir.ac.kntu.utils;
 
 import java.util.List;
 

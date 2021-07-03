@@ -1,47 +1,11 @@
-package ir.ac.kntu.models;
+package ir.ac.kntu.core;
 
-import ir.ac.kntu.map.Map;
-import ir.ac.kntu.rigidbody.Position;
-import ir.ac.kntu.rigidbody.Vector;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.geometry.Bounds;
-import javafx.geometry.Rectangle2D;
+import ir.ac.kntu.core.rigidbody.Position;
+import ir.ac.kntu.core.rigidbody.Vector;
 import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.util.Duration;
 
-import static ir.ac.kntu.Constants.*;
-
-import java.io.Serializable;
-import java.util.ArrayList;
-
-public abstract class GameObject extends Parent implements Serializable {
-    private static ArrayList<GameObject> world;
-    private static Timeline collisionChecker;
-    static {
-        world = new ArrayList<>();
-        collisionChecker = new Timeline();
-        collisionChecker.getKeyFrames().add(new KeyFrame(Duration.millis(40), e -> {
-            for (int i = 0; i < world.size(); i++) {
-                world.get(i).update();
-                for (int j = i+1; j < world.size(); j++) {
-                    if (world.get(i).getPosition().equals(world.get(j).position)) {
-                        world.get(i).onCollision(world.get(j));
-                        world.get(j).onCollision(world.get(i));
-                    }
-                }
-            }
-        }));
-    }
-
-    public static void startLoop() {
-        collisionChecker.setCycleCount(Timeline.INDEFINITE);
-        collisionChecker.play();
-    }
-
+public abstract class GameObject extends Parent {
     private ImageView mask;
     private Position position;
     private Vector direction;
@@ -51,7 +15,6 @@ public abstract class GameObject extends Parent implements Serializable {
     private int gridCode;
 
     public GameObject(Map map, int gridX, int gridY, int width, int height, int gridCode, ImageView mask) {
-        world.add(this);
         this.position = new Position(gridX, gridY);
         this.width = width;
         this.height = height;

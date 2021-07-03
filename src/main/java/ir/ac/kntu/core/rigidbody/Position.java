@@ -1,9 +1,7 @@
-package ir.ac.kntu.rigidbody;
+package ir.ac.kntu.core.rigidbody;
 
 import java.util.ArrayList;
 import java.util.Objects;
-
-import ir.ac.kntu.util.ChangeListener;
 
 public class Position {
     private double x;
