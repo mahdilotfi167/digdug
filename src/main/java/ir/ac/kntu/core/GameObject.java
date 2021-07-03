@@ -4,7 +4,10 @@ import ir.ac.kntu.core.rigidbody.Position;
 import ir.ac.kntu.core.rigidbody.Vector;
 import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
-
+/**
+ * A simple Class for working on game objects in javafx games
+ * for create your own gameobjects compatible with map model just inherit from this model
+ */
 public abstract class GameObject extends Parent {
     private ImageView mask;
     private Position position;
@@ -13,7 +16,18 @@ public abstract class GameObject extends Parent {
     private int height;
     private Map map;
     private int gridCode;
-
+/**
+ * Create a new GameObject
+ * @param map map that this gameobject should add on it
+ * @param gridX x position that this object should stay on it
+ * @param gridY y position that this object should stay on it
+ * @param width width that this object mask render on it
+ * @param height height that this object mask render on it
+ * @param gridCode unique grid code for this object
+ * @param mask mask for this object that shows on map
+ * <p><b>notice :</b> for destroying side effect of this object on map just use 0 for grid code<p>
+ * <p><b>notice :</b> for creating maskless gameobjects just use {@code new ImageView()} for mask argument<p>
+ */
     public GameObject(Map map, int gridX, int gridY, int width, int height, int gridCode, ImageView mask) {
         this.position = new Position(gridX, gridY);
         this.width = width;
@@ -108,6 +122,20 @@ public abstract class GameObject extends Parent {
 
     public ImageView getMask() {
         return mask;
+    }
+
+    public void setDirection(Vector direction) {
+        this.direction = direction;
+    }
+
+    public void setWidth(int width) {
+        this.mask.setFitWidth(width);
+        this.width = width;
+    }
+
+    public void setHeight(int height) {
+        this.mask.setFitHeight(height);
+        this.height = height;
     }
 
     public void onCollision(GameObject collider) {}

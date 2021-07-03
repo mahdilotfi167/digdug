@@ -1,7 +1,4 @@
-package ir.ac.kntu.utils;
-
-import ir.ac.kntu.core.GameObject;
-import ir.ac.kntu.core.Map;
+package ir.ac.kntu.core;
 
 @FunctionalInterface
 public interface GameObjectConstructor {
