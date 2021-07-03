@@ -1,6 +1,7 @@
 package ir.ac.kntu.models;
 
-import ir.ac.kntu.map.Map;
+import ir.ac.kntu.core.GameObject;
+import ir.ac.kntu.core.Map;
 import javafx.event.EventHandler;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;

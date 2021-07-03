@@ -3,9 +3,10 @@ package ir.ac.kntu.data;
 import java.io.Serializable;
 
 public class Person implements Serializable, Comparable<Person> {
-    public final static long serialVersionUID = 10;
+    public final static long serialVersionUID = 11;
     private String name;
     private int hiScore;
+    private int totalGames;
 
     public Person(String name, int hiScore) {
         this.name = name;
@@ -27,5 +28,13 @@ public class Person implements Serializable, Comparable<Person> {
     @Override
     public int compareTo(Person o) {
         return this.hiScore-o.hiScore;
+    }
+
+    public int getTotalGames() {
+        return totalGames;
+    }
+
+    public void setTotalGames(int totalGames) {
+        this.totalGames = totalGames;
     }
 }

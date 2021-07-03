@@ -3,11 +3,13 @@ package ir.ac.kntu.components;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.ListIterator;
-import ir.ac.kntu.map.Map;
+
+import ir.ac.kntu.core.Map;
+import ir.ac.kntu.core.rigidbody.Position;
+import ir.ac.kntu.core.rigidbody.Vector;
+
 import java.util.Stack;
 
-import ir.ac.kntu.rigidbody.Position;
-import ir.ac.kntu.rigidbody.Vector;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 

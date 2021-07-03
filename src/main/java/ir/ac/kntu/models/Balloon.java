@@ -1,7 +1,5 @@
 package ir.ac.kntu.models;
 
-import ir.ac.kntu.map.Map;
-import ir.ac.kntu.rigidbody.Position;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
@@ -9,17 +7,22 @@ import static ir.ac.kntu.Constants.*;
 
 import ir.ac.kntu.components.PathFinder;
 import ir.ac.kntu.components.PathFinder.Path;
+import ir.ac.kntu.core.Map;
+import ir.ac.kntu.core.rigidbody.Position;
 
 public class Balloon extends Sprite {
 
     private State state;
     private PathFinder pathFinder;
 
+    private int cycle;
+
     public Balloon(Map map, int gridX, int gridY, ImageView spriteSheet, int gridCode) {
         super(map, gridX, gridY, BLOCK_SCALE, BLOCK_SCALE, spriteSheet, gridCode);
         this.state = State.ROAM;
         this.pathFinder = new PathFinder(getMap());
         getSpriteRenderer().setDuration(Duration.millis(300));
+        this.cycle = 15;
     }
 
     private Player target;
@@ -30,7 +33,7 @@ public class Balloon extends Sprite {
 
     @Override
     public void update() {
-        if (counter++ % 15 == 0) {
+        if (counter++ % cycle == 0) {
             if (target != null) {
                 Path p = pathFinder.find(this.getPosition(), target.getPosition());
                 if (p.lenght() > 0) {
@@ -50,6 +53,16 @@ public class Balloon extends Sprite {
             }
         }
     }
+
+    protected int getCounter() {
+        return counter;
+    }
+
+    public void setCycle(int cycle) {
+        this.cycle = cycle;
+    }
+
+
 
     private void roam() {
         Position nextPos = this.getPosition().sum(getDirection());

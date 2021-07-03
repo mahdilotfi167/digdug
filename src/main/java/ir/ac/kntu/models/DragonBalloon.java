@@ -1,8 +1,9 @@
 package ir.ac.kntu.models;
 
-import ir.ac.kntu.map.Map;
 import javafx.scene.image.ImageView;
 import static ir.ac.kntu.Constants.*;
+
+import ir.ac.kntu.core.Map;
 public class DragonBalloon extends Balloon {
 
     public DragonBalloon(Map map, int gridX, int gridY) {

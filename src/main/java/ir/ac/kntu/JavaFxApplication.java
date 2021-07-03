@@ -7,20 +7,23 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TimerTask;
 
 import ir.ac.kntu.components.PathFinder;
 import ir.ac.kntu.components.PlayerController;
+import ir.ac.kntu.core.GameObject;
+import ir.ac.kntu.core.Map;
+import ir.ac.kntu.core.rigidbody.Position;
 import ir.ac.kntu.data.MapSerializer;
-import ir.ac.kntu.map.Map;
 import ir.ac.kntu.models.Balloon;
 import ir.ac.kntu.models.DragonBalloon;
-import ir.ac.kntu.models.GameObject;
 import ir.ac.kntu.models.NormalBalloon;
 import ir.ac.kntu.models.Player;
 import ir.ac.kntu.models.Wall;
-import ir.ac.kntu.rigidbody.Position;
-import ir.ac.kntu.util.GameObjectConstructor;
+import ir.ac.kntu.utils.GameObjectConstructor;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.ClipboardContent;
@@ -72,9 +75,9 @@ public class JavaFxApplication extends Application {
     
         Map root = new Map(grid,CONSTRUCTORS,FILLERS,BLOCK_SCALE,Color.BLACK);
         Scene scene = new Scene(root, 800, 600, Color.rgb(240, 240, 240));
-        // Player player = root.collect(Player.class).get(0);
+        Player player = root.collect(Player.class).get(0);
         
-        ArrayList<Balloon> balloons = new ArrayList<>();
+        // ArrayList<Balloon> balloons = new ArrayList<>();
         // balloons.addAll(root.collect(DragonBalloon.class));
         // balloons.addAll(root.collect(NormalBalloon.class));
 
@@ -86,15 +89,26 @@ public class JavaFxApplication extends Application {
         // scene.addEventHandler(KeyEvent.KEY_PRESSED, pc::keyHandler);
         // ArrayList<DragonBalloon> res = root.collect(DragonBalloon.class);
         // System.out.println(res);
-        scene.setOnMouseClicked(e->{
-            root.printGrid();
-        });
+        // scene.setOnMouseClicked(e->{
+            // root.printGrid();
+        // });
         // MapSerializer.export(root);
         // GameObject.startLoop();
         //*========================================
         // MapSerializer.load();
         //*========================================
         MenuHandler mh = new MenuHandler(stage);
+
+        // new Thread(()->{
+            // for (int i = 0;i<10;i++) {
+                // System.out.println(i);
+                // try {
+                    // Thread.sleep(1000);
+                // } catch (Exception e) {
+                    // e.printStackTrace();
+                // }
+            // }
+        // }).start();
         // Setting stage properties
         // stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("DigDig");

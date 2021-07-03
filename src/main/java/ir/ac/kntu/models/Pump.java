@@ -1,7 +1,4 @@
 package ir.ac.kntu.models;
-import ir.ac.kntu.map.Map;
-import ir.ac.kntu.rigidbody.Position;
-import ir.ac.kntu.rigidbody.Vector;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Rectangle2D;
@@ -18,6 +15,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ir.ac.kntu.ThreadPool;
+import ir.ac.kntu.core.Map;
+import ir.ac.kntu.core.rigidbody.Position;
+import ir.ac.kntu.core.rigidbody.Vector;
 public class Pump extends Object {
     private Vector lastDir;
     private Circle circle;

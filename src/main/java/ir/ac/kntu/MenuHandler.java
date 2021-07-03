@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import ir.ac.kntu.data.MapSerializer;
 import ir.ac.kntu.data.Person;
 import ir.ac.kntu.data.PersonDao;
 import ir.ac.kntu.data.SerializedPersonDao;
@@ -28,9 +29,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
+import static ir.ac.kntu.Constants.*;
 public class MenuHandler {
     private Stage stage;
     private Scene scene;
@@ -152,7 +154,7 @@ public class MenuHandler {
         lv.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent e) {
-                new Engine();
+                new Engine(new MapSerializer("map/arcade/1").load(CONSTRUCTORS, FILLERS, BLOCK_SCALE ,Color.BLACK));
             }
         });
         VBox box = new VBox();

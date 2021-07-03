@@ -1,8 +1,9 @@
 package ir.ac.kntu.models;
 
 import ir.ac.kntu.components.SpriteRenderer;
-import ir.ac.kntu.map.Map;
-import ir.ac.kntu.rigidbody.Vector;
+import ir.ac.kntu.core.GameObject;
+import ir.ac.kntu.core.Map;
+import ir.ac.kntu.core.rigidbody.Vector;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 

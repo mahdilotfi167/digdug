@@ -19,10 +19,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
+
+import ir.ac.kntu.core.GameObject;
+import ir.ac.kntu.core.Map;
 import ir.ac.kntu.data.MapSerializer;
 import ir.ac.kntu.models.Draggable;
-import ir.ac.kntu.models.GameObject;
-import ir.ac.kntu.util.GameObjectConstructor;
+import ir.ac.kntu.utils.GameObjectConstructor;
 
 public class MapBuilder extends Pane {
     private Map map;

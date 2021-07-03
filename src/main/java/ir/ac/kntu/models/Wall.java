@@ -1,7 +1,7 @@
 package ir.ac.kntu.models;
 import static ir.ac.kntu.Constants.*;
 
-import ir.ac.kntu.map.Map;
+import ir.ac.kntu.core.Map;
 import javafx.scene.image.ImageView;
 public class Wall extends Object {
 

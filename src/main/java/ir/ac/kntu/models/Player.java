@@ -1,8 +1,10 @@
 package ir.ac.kntu.models;
 import static ir.ac.kntu.Constants.*;
-import ir.ac.kntu.map.Map;
-import ir.ac.kntu.rigidbody.Position;
-import ir.ac.kntu.rigidbody.Vector;
+
+import ir.ac.kntu.core.GameObject;
+import ir.ac.kntu.core.Map;
+import ir.ac.kntu.core.rigidbody.Position;
+import ir.ac.kntu.core.rigidbody.Vector;
 import javafx.animation.KeyFrame;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;

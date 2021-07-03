@@ -8,8 +8,8 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.HashMap;
 
-import ir.ac.kntu.map.Map;
-import ir.ac.kntu.util.GameObjectConstructor;
+import ir.ac.kntu.core.Map;
+import ir.ac.kntu.utils.GameObjectConstructor;
 import javafx.scene.paint.Color;
 
 public class MapSerializer {
@@ -17,8 +17,8 @@ public class MapSerializer {
     public MapSerializer(String filename) {
         this.filename = filename;
     }
-    public static Map load(HashMap<Integer,GameObjectConstructor> constructors,HashMap<Integer,Color> fillers,int blockScale,Color background) {
-        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream("map.map"))) {
+    public Map load(HashMap<Integer,GameObjectConstructor> constructors,HashMap<Integer,Color> fillers,int blockScale,Color background) {
+        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(filename+".map"))) {
             IntBuffer buffer = ByteBuffer.wrap(in.readAllBytes()).asIntBuffer();
             int grid[][] = new int[buffer.get(0)][buffer.get(1)];
             for (int i = 0;i<grid.length;i++) {

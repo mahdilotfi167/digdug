@@ -1,7 +1,7 @@
 package ir.ac.kntu.components;
 
+import ir.ac.kntu.core.rigidbody.Vector;
 import ir.ac.kntu.models.Player;
-import ir.ac.kntu.rigidbody.Vector;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
