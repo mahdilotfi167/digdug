@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import ir.ac.kntu.core.rigidbody.Position;
-import ir.ac.kntu.utils.GameObjectConstructor;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.canvas.Canvas;
@@ -43,13 +42,15 @@ public class Map extends Pane {
         collisionChecker = new Timeline();
         collisionChecker.getKeyFrames().add(new KeyFrame(Duration.millis(40), e -> {
             for (int i = 0; i < pointers.size(); i++) {
-                pointers.get(i).update();
                 for (int j = i+1; j < pointers.size(); j++) {
                     if (pointers.get(i).getPosition().equals(pointers.get(j).getPosition())) {
                         pointers.get(i).onCollision(pointers.get(j));
                         pointers.get(j).onCollision(pointers.get(i));
                     }
                 }
+            }
+            for (int i = 0;i < pointers.size(); i++) {
+                pointers.get(i).update();
             }
         }));
         render();
@@ -131,6 +132,13 @@ public class Map extends Pane {
             return true;
         }
         return this.fillers.get(grid[y][x])!=null;
+    }
+    public boolean isBlock(Position position) {
+        return isBlock((int)position.getX(),(int)position.getY());
+    }
+
+    public int getData(Position position) {
+        return grid[(int)position.getY()][(int)position.getX()];
     }
 
     private Set<java.util.Map.Entry<Integer,Color>> fillSet;//todo change to arrayList

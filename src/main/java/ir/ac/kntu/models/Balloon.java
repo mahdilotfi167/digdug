@@ -14,7 +14,7 @@ public class Balloon extends Sprite {
 
     private State state;
     private PathFinder pathFinder;
-
+    private static final Position out = new Position(0,0);
     private int cycle;
 
     public Balloon(Map map, int gridX, int gridY, ImageView spriteSheet, int gridCode) {
@@ -35,9 +35,10 @@ public class Balloon extends Sprite {
     public void update() {
         if (counter++ % cycle == 0) {
             if (target != null) {
-                Path p = pathFinder.find(this.getPosition(), target.getPosition());
-                if (p.lenght() > 0) {
-                    this.currentPath = p;
+                Path playerPath = pathFinder.find(this.getPosition(), target.getPosition());
+                Path exitPath = pathFinder.find(this.getPosition(),out);
+                if (playerPath.lenght() > 0) {
+                    this.currentPath = playerPath;
                     this.state = State.FOLLOW;
                 }
             }

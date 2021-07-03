@@ -27,8 +27,11 @@ public class Player extends Sprite {
     public Player(Map map, int gridX, int gridY) {
         super(map, gridX, gridY, BLOCK_SCALE,BLOCK_SCALE,new ImageView("/assets/player.png"),PLAYER_GRID_CODE);
         this.movation = new Timeline(new KeyFrame(Duration.millis(150), e->{
-            super.move(movement);
-            getMap().clearBlock((int)this.getPosition().getX(), (int)this.getPosition().getY());
+            setDirection(movement.getDirection());
+            if ((getMap().getData(this.getPosition().sum(movement)) & STONE_GRID_CODE) == 0) {
+                super.move(movement);
+                getMap().clearBlock((int)this.getPosition().getX(), (int)this.getPosition().getY());
+            }
         }));
         this.movation.setCycleCount(1);
         this.speed = 1;
@@ -56,7 +59,6 @@ public class Player extends Sprite {
         // pump.setRotate(getDirection().getRotation());
         pump.shoot(this.getCenterPos().sum(getDirection().getDirection(BLOCK_SCALE)), getDirection());
         // pump.setVisible(false);
-
     }
     private Position lastPos;
     @Override
@@ -74,6 +76,6 @@ public class Player extends Sprite {
 
     @Override
     public void onCollision(GameObject collider) {
-        System.out.println(collider.getClass().getName());
+        // System.out.println(collider.getClass().getName());
     }
 }
