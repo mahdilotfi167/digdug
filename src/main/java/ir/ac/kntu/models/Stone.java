@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Stone extends Object {
     private boolean falling;
     private Vector gravity;
-    private ArrayList<GameObject> crushers;
+    private ArrayList<Sprite> crushers;
     public Stone(Map map, int gridX, int gridY) {
         super(map, gridX, gridY, BLOCK_SCALE, BLOCK_SCALE, new ImageView("/assets/stone.png"), STONE_GRID_CODE);
         this.gravity = new Vector(0, 1);
@@ -26,15 +26,15 @@ public class Stone extends Object {
             if (counter++>25) {
                 falling = true;
                 move(gravity);
-                for (GameObject crusher : crushers) {
+                for (Sprite crusher : crushers) {
                     crusher.move(gravity);
                 }
             }
         } else if (falling) {
             if (deadCounter++>15) {
                 getMap().removeObject(this);
-                for (GameObject crusher : crushers) {
-                    getMap().removeObject(crusher);
+                for (Sprite crusher : crushers) {
+                    crusher.kill();
                 }
             }
         }
@@ -44,7 +44,7 @@ public class Stone extends Object {
         if (falling) {
             if (collider instanceof Sprite) {
                 collider.setWidth(collider.getWidth()/2);
-                this.crushers.add(collider);
+                this.crushers.add((Sprite)collider);
             }
         }
     }

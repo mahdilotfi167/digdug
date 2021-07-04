@@ -21,10 +21,12 @@ public class Map extends Pane {
     private HashMap<Integer,Color> fillers;
     private ArrayList<GameObject> pointers;
     private int blockScale;
-    GraphicsContext graphicsContext;
+    private GraphicsContext graphicsContext;
+    private HashMap<GameObject,Position> spawnPositions;
 
     public Map(int[][] gridCodes,HashMap<Integer,GameObjectConstructor> constructors,HashMap<Integer,Color> fillers,int blockScale,Color background) {
         this.blockScale = blockScale;
+        this.spawnPositions = new HashMap<>();
         this.grid = gridCodes.clone();
         this.constructors = constructors;
         this.fillers = fillers;
@@ -77,6 +79,7 @@ public class Map extends Pane {
                             gameObject = entry.getValue().getObject(this, j, i);
                             getChildren().add(gameObject);
                             pointers.add(gameObject);
+                            spawnPositions.put(gameObject, new Position(gameObject.getPosition()));
                         }
                     }
                 }
@@ -138,6 +141,9 @@ public class Map extends Pane {
     }
 
     public int getData(Position position) {
+        if (!this.contains(position)) {
+            return 0;
+        }
         return grid[(int)position.getY()][(int)position.getX()];
     }
 
@@ -229,5 +235,12 @@ public class Map extends Pane {
     }
     public void stopLoop() {
         collisionChecker.stop();
+    }
+
+    public void resetSpawnPositions() {
+        for (java.util.Map.Entry<GameObject,Position> entry : spawnPositions.entrySet()) {
+            entry.getKey().getPosition().setX(entry.getValue().getX());
+            entry.getKey().getPosition().setY(entry.getValue().getY());
+        }
     }
 }

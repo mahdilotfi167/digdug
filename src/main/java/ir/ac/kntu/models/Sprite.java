@@ -46,4 +46,10 @@ public class Sprite extends GameObject {
             getMask().setRotate(direction.getRotation());
         }
     }
+/**
+ * kill method that calls by other gameobject that may kill this sprite
+ */
+    public void kill() {
+        getMap().removeObject(this);
+    }
 }

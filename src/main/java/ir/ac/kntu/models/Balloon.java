@@ -5,8 +5,10 @@ import javafx.util.Duration;
 
 import static ir.ac.kntu.Constants.*;
 
+import ir.ac.kntu.Engine;
 import ir.ac.kntu.components.PathFinder;
 import ir.ac.kntu.components.PathFinder.Path;
+import ir.ac.kntu.core.GameObject;
 import ir.ac.kntu.core.Map;
 import ir.ac.kntu.core.rigidbody.Position;
 
@@ -61,6 +63,14 @@ public class Balloon extends Sprite {
 
     public void setCycle(int cycle) {
         this.cycle = cycle;
+    }
+
+
+    @Override
+    public void onCollision(GameObject collider) {
+        if (collider instanceof Player) {
+            ((Player)collider).kill();
+        }
     }
 
 

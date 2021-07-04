@@ -1,6 +1,7 @@
 package ir.ac.kntu.models;
 import static ir.ac.kntu.Constants.*;
 
+import ir.ac.kntu.Engine;
 import ir.ac.kntu.core.GameObject;
 import ir.ac.kntu.core.Map;
 import ir.ac.kntu.core.rigidbody.Position;
@@ -77,5 +78,12 @@ public class Player extends Sprite {
     @Override
     public void onCollision(GameObject collider) {
         // System.out.println(collider.getClass().getName());
+    }
+
+    @Override
+    public void kill() {
+        Engine.losePlayer();
+        this.getMask().setFitWidth(BLOCK_SCALE);
+        this.getMask().setFitHeight(BLOCK_SCALE);
     }
 }

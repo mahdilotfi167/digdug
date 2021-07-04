@@ -26,7 +26,7 @@ import javafx.stage.Stage;
 
 public class Engine {
     private static Engine current;
-    private static int playerHealth;
+    private int playerHealth;
     private static int hiScore;
     private boolean onGame;
     private Stage stage;
@@ -61,7 +61,9 @@ public class Engine {
         bootMap(map);
         firstStartGame();
     }
+    private HBox health = new HBox();
     public void drawPane() {
+        this.playerHealth = 3;
         this.stage = new Stage();
         this.pane = new Pane();
         this.scene = new Scene(pane,923,627);
@@ -83,7 +85,6 @@ public class Engine {
         VBox.setMargin(hiScoreLbl, new Insets(10,10,10,10));
         Label hiScore = getLabel("0", 30, 10);
         box.getChildren().add(hiScore);
-        HBox health = new HBox();
         health.setAlignment(Pos.CENTER_LEFT);
         health.setPrefHeight(39);
         health.setPrefWidth(134);
@@ -100,6 +101,7 @@ public class Engine {
     private void bootMap(Map map) {
         this.remainingTime = 180;
         if (this.map != null) {
+            this.map.stopLoop();
             this.pane.getChildren().remove(this.map);
         }
         this.map = map;
@@ -117,16 +119,30 @@ public class Engine {
         res.getStylesheets().add("css/main.css");
         return res;
     }
-    private void firstStartGame() {
+
+    private Label index = new Label();
+    private int startTime;
+    private void firstStartGame() {//* start 5 seconds ...............
         new Thread(()->{
-            for (int i = 5;i>0;i--) {
-                System.out.println(i);
+            Platform.runLater(()->{
+                index.setLayoutX(100);
+                index.setLayoutY(100);
+                index.setStyle("-fx-text-fill: #ffffff;-fx-font-size: 60px");    
+                pane.getChildren().add(index);
+            });
+            for (startTime = 5;startTime>0;startTime--) {
                 try {
+                    Platform.runLater(()->{
+                        index.setText(""+startTime);
+                    });
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            Platform.runLater(()->{
+                pane.getChildren().remove(index);
+            });
             startTimer();
             startMap();
         }).start();
@@ -148,7 +164,7 @@ public class Engine {
         //     map.addObject(new RandomCreator(map));
         // });
         rc = new RandomCreator(map);
-        new Thread(()->{
+        Thread randomer = new Thread(()->{
             while (onGame) {
                 Platform.runLater(()->{rc.createRandom();});
                 try {
@@ -157,7 +173,9 @@ public class Engine {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
+        randomer.setDaemon(true);
+        randomer.start();
     }
     private void startTimer() {
         Thread timerThread = new Thread(()->{
@@ -182,16 +200,26 @@ public class Engine {
         return res;
     }
     private static void setPlayerHealth(int health) {
-        playerHealth = 0;
+
         for (int i = 0;i<health;i++) {
             increasePlayerHealth();
         }
     }
     public static void losePlayer() {
+        current.playerHealth--;
+        current.health.getChildren().clear();
+        for (int i = 0;i<current.playerHealth;i++) {
+            current.health.getChildren().add(current.getLogo());
+        }
 
+        if (current.playerHealth == 0) {
+            //todo
+        }
+        current.map.resetSpawnPositions();
     }
     public static void increasePlayerHealth() {
-        
+        current.playerHealth++;
+        current.health.getChildren().add(current.getLogo());
     }
     public static void increaseScore() {
 
