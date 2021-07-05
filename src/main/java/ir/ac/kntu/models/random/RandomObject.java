@@ -14,7 +14,7 @@ public class RandomObject extends GameObject {
     }   
     @Override
     public void update() {
-        if (counter++>125) {
+        if (counter++>250) {
             getMap().removeObject(this);
         }
     }

@@ -28,7 +28,7 @@ public class Sprite extends GameObject {
         //     getMask().setScaleX(1);
         //     getMask().setRotate(movement.getRotation());
         // }
-        setDirection(movement.getDirection());
+        // setDirection(movement.getDirection());
         super.move(movement);
         spriteRenderer.play();
     }
@@ -45,6 +45,7 @@ public class Sprite extends GameObject {
             getMask().setScaleX(1);
             getMask().setRotate(direction.getRotation());
         }
+        super.setDirection(direction);
     }
 /**
  * kill method that calls by other gameobject that may kill this sprite

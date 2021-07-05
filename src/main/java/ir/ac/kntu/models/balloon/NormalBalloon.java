@@ -1,4 +1,4 @@
-package ir.ac.kntu.models;
+package ir.ac.kntu.models.balloon;
 import static ir.ac.kntu.Constants.*;
 
 import ir.ac.kntu.core.Map;

@@ -238,9 +238,11 @@ public class Map extends Pane {
     }
 
     public void resetSpawnPositions() {
-        for (java.util.Map.Entry<GameObject,Position> entry : spawnPositions.entrySet()) {
-            entry.getKey().getPosition().setX(entry.getValue().getX());
-            entry.getKey().getPosition().setY(entry.getValue().getY());
+        for (GameObject go : this.pointers) {
+            if (spawnPositions.get(go)!=null) {
+                go.getPosition().setX(spawnPositions.get(go).getX());   
+                go.getPosition().setY(spawnPositions.get(go).getY());
+            }
         }
     }
 }

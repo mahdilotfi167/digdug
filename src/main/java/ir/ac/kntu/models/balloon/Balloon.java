@@ -1,4 +1,4 @@
-package ir.ac.kntu.models;
+package ir.ac.kntu.models.balloon;
 
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -11,6 +11,8 @@ import ir.ac.kntu.components.PathFinder.Path;
 import ir.ac.kntu.core.GameObject;
 import ir.ac.kntu.core.Map;
 import ir.ac.kntu.core.rigidbody.Position;
+import ir.ac.kntu.models.Player;
+import ir.ac.kntu.models.Sprite;
 
 public class Balloon extends Sprite {
 

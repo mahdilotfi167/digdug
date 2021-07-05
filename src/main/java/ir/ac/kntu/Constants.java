@@ -3,10 +3,10 @@ package ir.ac.kntu;
 import java.util.HashMap;
 
 import ir.ac.kntu.core.GameObjectConstructor;
-import ir.ac.kntu.models.DragonBalloon;
-import ir.ac.kntu.models.NormalBalloon;
 import ir.ac.kntu.models.Player;
 import ir.ac.kntu.models.Stone;
+import ir.ac.kntu.models.balloon.DragonBalloon;
+import ir.ac.kntu.models.balloon.NormalBalloon;
 import javafx.scene.paint.Color;
 
 public class Constants {

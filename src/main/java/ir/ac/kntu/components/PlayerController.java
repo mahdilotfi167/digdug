@@ -26,19 +26,19 @@ public class PlayerController {
         KeyCode key = e.getCode();
         int speed = 5;
         if (key == up) {
-            player.move(new Vector(0, -1).multiply(player.getSpeed()));
+            player.move(new Vector(0, -1));
             e.consume();
         }
         if (key == down) {
-            player.move(new Vector(0, 1).multiply(player.getSpeed()));
+            player.move(new Vector(0, 1));
             e.consume();
         }
         if (key == right) {
-            player.move(new Vector(1, 0).multiply(player.getSpeed()));
+            player.move(new Vector(1, 0));
             e.consume();
         }
         if (key == left) {
-            player.move(new Vector(-1, 0).multiply(player.getSpeed()));
+            player.move(new Vector(-1, 0));
             e.consume();
         }
         if (key == shoot) {

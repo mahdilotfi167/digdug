@@ -97,7 +97,7 @@ public abstract class GameObject extends Parent {
     }
 
     public void move(Vector movement) {
-        this.direction = movement.getDirection();
+        setDirection(movement.getDirection());
         if (!map.contains(this.position.sum(movement))) {
             return;
         }

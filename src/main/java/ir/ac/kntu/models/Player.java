@@ -21,13 +21,14 @@ public class Player extends Sprite {
     // ScaleTransition st;
     // TranslateTransition tt;
     // private Position nextGridPos;
-    private int speed;
+    private double speed;
     private Pump pump;
     private Timeline movation;
     private Vector movement;
     public Player(Map map, int gridX, int gridY) {
         super(map, gridX, gridY, BLOCK_SCALE,BLOCK_SCALE,new ImageView("/assets/player.png"),PLAYER_GRID_CODE);
-        this.movation = new Timeline(new KeyFrame(Duration.millis(150), e->{
+        this.speed = 2;
+        this.movation = new Timeline(new KeyFrame(Duration.millis(1000/speed), e->{
             setDirection(movement.getDirection());
             if ((getMap().getData(this.getPosition().sum(movement)) & STONE_GRID_CODE) == 0) {
                 super.move(movement);
@@ -35,7 +36,6 @@ public class Player extends Sprite {
             }
         }));
         this.movation.setCycleCount(1);
-        this.speed = 1;
         // this.nextGridPos = new Position(gridX, gridY);
         // this.pump = new ImageView("/assets/pump.png");
         // this.st = new ScaleTransition(Duration.millis(1000), pump);
@@ -68,11 +68,19 @@ public class Player extends Sprite {
         movation.play();
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
-    public void setSpeed(int speed) {
+    public void setSpeed(double speed) {
         this.speed = speed;
+        this.movation = new Timeline(new KeyFrame(Duration.millis(1000/speed), e->{
+            setDirection(movement.getDirection());
+            if ((getMap().getData(this.getPosition().sum(movement)) & STONE_GRID_CODE) == 0) {
+                super.move(movement);
+                getMap().clearBlock((int)this.getPosition().getX(), (int)this.getPosition().getY());
+            }
+        }));
+        this.movation.setCycleCount(1);
     }
 
     @Override
