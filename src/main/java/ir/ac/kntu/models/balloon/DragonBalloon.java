@@ -1,5 +1,6 @@
 package ir.ac.kntu.models.balloon;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import static ir.ac.kntu.Constants.*;
 
@@ -11,19 +12,27 @@ public class DragonBalloon extends Balloon {
     public DragonBalloon(Map map, int gridX, int gridY) {
         super(map, gridX, gridY, new ImageView("/assets/dragon.png"), DRAGON_BALLOON_GRID_CODE);
     }
-    private Fire fire;
+    // private Fire fire;
+    // @Override
+    // public void update() {
+    //     if (counter++%75==0) {
+    //         Position nextPos = this.getPosition().sum(this.getDirection());
+    //         if (Random.getBoolean() && !getMap().isBlock(nextPos)) {
+    //             fire = new Fire(getMap(), (int)nextPos.getX(), (int)nextPos.getY());
+    //             fire.setDirection(this.getDirection());
+    //             getMap().addObject(fire);
+    //         }
+    //     }
+    //     if (fire==null || !fire.isActive()) {
+    //         super.update();
+    //     }
+    // }
+
     @Override
-    public void update() {
-        if (counter++%75==0) {
-            Position nextPos = this.getPosition().sum(this.getDirection());
-            if (Random.getBoolean() && !getMap().isBlock(nextPos)) {
-                fire = new Fire(getMap(), (int)nextPos.getX(), (int)nextPos.getY());
-                fire.setDirection(this.getDirection());
-                getMap().addObject(fire);
-            }
+    protected void setInflateOrder(int inflateOrder) {
+        if (0<inflateOrder && inflateOrder < 5) {
+            this.getInflateMask().setImage(new Image("/assets/dragon/order"+inflateOrder+".png"));
         }
-        if (fire==null || !fire.isActive()) {
-            super.update();
-        }
+        super.setInflateOrder(inflateOrder);
     }
 }

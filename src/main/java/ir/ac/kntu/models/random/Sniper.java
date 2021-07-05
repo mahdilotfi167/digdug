@@ -2,6 +2,7 @@ package ir.ac.kntu.models.random;
 
 import ir.ac.kntu.core.GameObject;
 import ir.ac.kntu.core.Map;
+import ir.ac.kntu.models.Player;
 import javafx.scene.image.ImageView;
 
 public class Sniper extends RandomObject {
@@ -11,6 +12,9 @@ public class Sniper extends RandomObject {
     }
     @Override
     public void onCollision(GameObject collider) {
-        //*do something
+        if (collider instanceof Player) {
+            ((Player)collider).getPump().setRange(5);
+            getMap().removeObject(this);
+        }
     }
 }

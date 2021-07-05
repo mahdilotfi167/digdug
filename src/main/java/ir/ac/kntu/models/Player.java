@@ -27,15 +27,15 @@ public class Player extends Sprite {
     private Vector movement;
     public Player(Map map, int gridX, int gridY) {
         super(map, gridX, gridY, BLOCK_SCALE,BLOCK_SCALE,new ImageView("/assets/player.png"),PLAYER_GRID_CODE);
-        this.speed = 2;
-        this.movation = new Timeline(new KeyFrame(Duration.millis(1000/speed), e->{
-            setDirection(movement.getDirection());
-            if ((getMap().getData(this.getPosition().sum(movement)) & STONE_GRID_CODE) == 0) {
-                super.move(movement);
-                getMap().clearBlock((int)this.getPosition().getX(), (int)this.getPosition().getY());
-            }
-        }));
-        this.movation.setCycleCount(1);
+        // this.speed = 2;
+        setSpeed(2);
+        // this.movation = new Timeline(new KeyFrame(Duration.millis(1000/speed), e->{
+        //     setDirection(movement.getDirection());
+        //     if ((getMap().getData(this.getPosition().sum(movement)) & STONE_GRID_CODE) == 0) {
+        //         super.move(movement);
+        //         getMap().clearBlock((int)this.getPosition().getX(), (int)this.getPosition().getY());
+        //     }
+        // }));
         // this.nextGridPos = new Position(gridX, gridY);
         // this.pump = new ImageView("/assets/pump.png");
         // this.st = new ScaleTransition(Duration.millis(1000), pump);
@@ -43,7 +43,8 @@ public class Player extends Sprite {
         // pump.setFitHeight(BLOCK_SCALE);
         // this.st.setCycleCount(1);
         // st.setByX(3);
-        this.pump = new Pump(getMap(), 3, 3);
+        this.pump = new Pump(getMap());
+        getMap().addObject(this.pump);
         // this.pump.setVisible(false);
         // this.getChildren().add(pump);
         // tt = new TranslateTransition(Duration.millis(1000),pump);
@@ -58,12 +59,15 @@ public class Player extends Sprite {
         // pump.setLayoutX(p.getX()-BLOCK_SCALE/2);
         // pump.setLayoutY(p.getY()-BLOCK_SCALE/2);
         // pump.setRotate(getDirection().getRotation());
-        pump.shoot(this.getCenterPos().sum(getDirection().getDirection(BLOCK_SCALE)), getDirection());
+        pump.shoot(this.getPosition().sum(this.getDirection()), getDirection());
         // pump.setVisible(false);
     }
     private Position lastPos;
     @Override
     public void move(Vector movement) {
+        if (this.pump.isActive()) {
+            return;
+        }
         this.movement = movement;
         movation.play();
     }
@@ -93,5 +97,9 @@ public class Player extends Sprite {
         Engine.losePlayer();
         this.getMask().setFitWidth(BLOCK_SCALE);
         this.getMask().setFitHeight(BLOCK_SCALE);
+    }
+
+    public Pump getPump() {
+        return pump;
     }
 }

@@ -15,40 +15,84 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ir.ac.kntu.ThreadPool;
+import ir.ac.kntu.core.GameObject;
 import ir.ac.kntu.core.Map;
 import ir.ac.kntu.core.rigidbody.Position;
 import ir.ac.kntu.core.rigidbody.Vector;
+import ir.ac.kntu.models.balloon.Balloon;
 public class Pump extends Object {
-    private Vector lastDir;
     private Circle circle;
-    public Pump(Map map, int gridX, int gridY) {
-        super(map, gridX, gridY, BLOCK_SCALE, BLOCK_SCALE, new ImageView("/assets/pump.png"), PUMP_GRID_CODE);
-        this.getMask().setVisible(false);
-        this.getChildren().remove(getMap());
+    private int range;
+    private boolean active;
+    private int counter;
+    private int lenght;
+    private int dir;
+    // private Timeline shooter = new Timeline();
+    public Pump(Map map) {
+        super(map, 0,0, BLOCK_SCALE, BLOCK_SCALE,new ImageView(), 0);
         circle = new Circle(this.getLayoutX(), this.getLayoutY(), 3, Color.RED);
         getChildren().add(circle);
+        circle.setLayoutX(BLOCK_SCALE/2);
+        circle.setLayoutY(BLOCK_SCALE/2);
+        circle.setVisible(false);
+        // shooter.getKeyFrames().add(new KeyFrame(Duration.millis(100), e->move(this.getDirection())));//!danger collision detection
+        // shooter.setOnFinished(e->{this.active=false;circle.setVisible(false);});
+        setRange(3);
     }
-    private boolean isActive;
-    // private Position pos = new Position(0,0);
+    public void setRange(int range) {
+        this.range = range;
+        // this.shooter.setCycleCount(range);
+    }
     public void shoot(Position position,Vector direction) {
-        circle.setVisible(true);
+        if (!this.active) {
+            this.lenght = 0;
+            this.getPosition().setX(position.getX());
+            this.getPosition().setY(position.getY());
+            this.setDirection(direction.getDirection());
+            this.active = true;
+            circle.setVisible(true);
+            this.dir=1;
+            // shooter.play();
+        }
         // this.setCurrentLayoutX(position.getX());
         // this.setCurrentLayoutY(position.getY());
-        Timeline tl = new Timeline(
-            new KeyFrame(Duration.millis(10),e->{
-                // setCurrentLayoutX(getCurrentLayoutX()+direction.getX());
-                // setCurrentLayoutY(getCurrentLayoutY()+direction.getY());
-            }) 
-        );
-        tl.setOnFinished(e -> {
             // getChildren().add(new Circle(view.getLayoutX(),view.getLayoutY(),5, Color.RED));
-            circle.setVisible(false);
-        });
-        tl.setCycleCount(3*BLOCK_SCALE);
-        tl.play();   
         // this.getMask().setRotate(direction.getRotation());
         // this.lastDir = direction;
         // pos.setX(position.getX()-BLOCK_SCALE/2);
         // pos.setY(position.getY()-BLOCK_SCALE/2);
+    }
+    @Override
+    public void update() {
+        // if (counter++%1 == 0) {
+            if (this.active) {
+                if (lenght == range-1 && dir>0) {
+                    this.setDirection(getDirection().multiply(-1));
+                    dir=-dir;
+                }
+                this.move(this.getDirection());
+                lenght+=dir;
+                if (lenght == 0 && dir<0) {
+                    this.active = false;
+                    this.circle.setVisible(false);
+                }
+            }
+        // }
+    }
+    @Override
+    public void onCollision(GameObject collider) {
+        if (this.active) {
+                if (collider instanceof Balloon) {
+                    Balloon b = (Balloon)collider;
+                    b.inflate();
+                    this.setDirection(getDirection().multiply(-1));
+                    dir=-dir;
+                    // this.move(this.getDirection().multiply(-1));
+                    // lenght+=dir;
+                }
+            }
+        }
+    public boolean isActive() {
+        return this.active;
     }
 }
