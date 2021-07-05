@@ -130,6 +130,9 @@ public class Balloon extends Sprite {
             this.inflateMask.setFitHeight(getHeight()*(1+inflateOrder/5.0));
             this.inflateMask.setFitWidth(getWidth()*(1+inflateOrder/5.0));
         }
+        if (inflateOrder == 4) {
+            this.kill();
+        }
         this.inflateOrder = inflateOrder;
     }
     protected int getInflateOrder() {

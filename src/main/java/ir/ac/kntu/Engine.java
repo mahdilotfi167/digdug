@@ -6,6 +6,7 @@ import java.util.Timer;
 import ir.ac.kntu.components.PlayerController;
 import ir.ac.kntu.core.Map;
 import ir.ac.kntu.data.Person;
+import ir.ac.kntu.data.SerializedPersonDao;
 import ir.ac.kntu.models.Player;
 import ir.ac.kntu.models.balloon.Balloon;
 import ir.ac.kntu.models.balloon.DragonBalloon;
@@ -27,17 +28,19 @@ import javafx.stage.Stage;
 public class Engine {
     private static Engine current;
     private int playerHealth;
-    private static int hiScore;
+    private int hiScore;
     private boolean onGame;
     private Stage stage;
     private Scene scene;
     private Pane pane;
     private Map map;
-    private static boolean arcade;
+    private boolean arcade;
     private int remainingTime;
     private Label timeLabel;
     private int round;
     private Label roundLabel;
+    private Label scoreLabel;
+    private Person person;
     public Engine(Person person) {
         current = this;
         drawPane();
@@ -47,6 +50,7 @@ public class Engine {
             onGame = false;
         });
         stage.show();
+        this.person = person;
     }
     public Engine(Map map) {
         current = this;
@@ -83,8 +87,8 @@ public class Engine {
         box.getChildren().add(hiScoreLbl);
         hiScoreLbl.setStyle("-fx-text-fill: red; -fx-font-size: 20px;");
         VBox.setMargin(hiScoreLbl, new Insets(10,10,10,10));
-        Label hiScore = getLabel("0", 30, 10);
-        box.getChildren().add(hiScore);
+        scoreLabel = getLabel("0", 30, 10);
+        box.getChildren().add(scoreLabel);
         health.setAlignment(Pos.CENTER_LEFT);
         health.setPrefHeight(39);
         health.setPrefWidth(134);
@@ -189,10 +193,23 @@ public class Engine {
                     e.printStackTrace();
                 }
             }
-            //finish game
+            finishGame();
         });
         timerThread.start();
     }
+
+    private void finishGame() {
+        if (this.arcade) {
+            if (this.person.getHiScore() < this.getHiScore()) {
+                person.setHiScore(this.hiScore);
+                new SerializedPersonDao("persons").update(person);
+            }
+        }
+        Platform.runLater(()->{
+            this.stage.close();
+        });
+    }
+
     private ImageView getLogo() {
         ImageView res = new ImageView("/assets/play.png");
         res.setFitWidth(28);
@@ -213,7 +230,7 @@ public class Engine {
         }
 
         if (current.playerHealth == 0) {
-            //todo
+            current.finishGame();
         }
         current.map.resetSpawnPositions();
     }
@@ -221,8 +238,15 @@ public class Engine {
         current.playerHealth++;
         current.health.getChildren().add(current.getLogo());
     }
-    public static void increaseScore() {
-
+    public void setHiScore(int hiScore) {
+        this.hiScore = hiScore;
+        scoreLabel.setText(""+hiScore);
+    }
+    public int getHiScore() {
+        return hiScore;
+    }
+    public static void increaseScore(int score) {
+        current.setHiScore(current.getHiScore()+score);
     }
     public static void winedPlayer() {
 

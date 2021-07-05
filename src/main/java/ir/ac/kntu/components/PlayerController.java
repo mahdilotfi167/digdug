@@ -24,7 +24,6 @@ public class PlayerController {
 
     public void keyHandler(KeyEvent e) {
         KeyCode key = e.getCode();
-        int speed = 5;
         if (key == up) {
             player.move(new Vector(0, -1));
             e.consume();
