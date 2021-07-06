@@ -135,6 +135,13 @@ public class Balloon extends Sprite {
         }
         this.inflateOrder = inflateOrder;
     }
+
+    @Override
+    public void kill() {
+        Engine.deadBalloon();
+        super.kill();
+    }
+
     protected int getInflateOrder() {
         return inflateOrder;
     }

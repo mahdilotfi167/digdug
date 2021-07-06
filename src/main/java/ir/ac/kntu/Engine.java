@@ -1,10 +1,13 @@
 package ir.ac.kntu;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Timer;
 
 import ir.ac.kntu.components.PlayerController;
 import ir.ac.kntu.core.Map;
+import ir.ac.kntu.data.BinaryWriter;
+import ir.ac.kntu.data.MapSerializer;
 import ir.ac.kntu.data.Person;
 import ir.ac.kntu.data.SerializedPersonDao;
 import ir.ac.kntu.models.Player;
@@ -23,7 +26,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import static ir.ac.kntu.Constants.*;
+
 
 public class Engine {
     private static Engine current;
@@ -41,20 +47,53 @@ public class Engine {
     private Label roundLabel;
     private Label scoreLabel;
     private Person person;
+    private int enemiesCount;
     public Engine(Person person) {
+        this.person = person;
         current = this;
+        this.remainingTime = 180;
+        this.round = 1;
+        this.playerHealth = 3;
+        // this.playerHealth = 3;
         drawPane();
+
+        File dat = new File("save/"+this.person.getName()+".dat");
+        if (dat.exists()) {
+            bootMap(new MapSerializer("save/"+this.person.getName()).load(CONSTRUCTORS, FILLERS, BLOCK_SCALE ,Color.BLACK));
+            int[] data = new BinaryWriter("save/"+this.person.getName()).get();
+            this.remainingTime = data[0];
+            this.round = data[1];
+            this.hiScore = data[2];
+            this.playerHealth = data[3];
+            new File("save/"+this.person.getName()+".map").delete();
+            dat.delete();
+        } else {
+            bootMap(new MapSerializer("src/main/resources/map/arcade/"+round).load(CONSTRUCTORS, FILLERS, BLOCK_SCALE ,Color.BLACK));
+        }
+        setPlayerHealth(playerHealth);
+        startTimer();
+
         arcade = true;
         onGame = true;
-        stage.setOnCloseRequest(e->{
-            onGame = false;
-        });
         stage.show();
-        this.person = person;
+        firstStartGame();
+        stage.setOnCloseRequest(e->{
+            if (onGame) {
+                new File("save/").mkdirs();
+                new MapSerializer("save/"+this.person.getName()).export(this.map);
+                new BinaryWriter("save/"+this.person.getName()).write(new int[]{remainingTime,round,hiScore,playerHealth});
+            }
+            onGame = false;
+            map.stopLoop();
+        });
+
+        scoreLabel.setText(""+this.hiScore);
     }
     public Engine(Map map) {
         current = this;
         drawPane();
+        this.remainingTime = 180;
+        setPlayerHealth(3);
         arcade = false;
         onGame = true;
         stage.setOnCloseRequest(e->{
@@ -64,10 +103,10 @@ public class Engine {
         stage.show();
         bootMap(map);
         firstStartGame();
+        startTimer();
     }
     private HBox health = new HBox();
     public void drawPane() {
-        this.playerHealth = 3;
         this.stage = new Stage();
         this.pane = new Pane();
         this.scene = new Scene(pane,923,627);
@@ -92,18 +131,17 @@ public class Engine {
         health.setAlignment(Pos.CENTER_LEFT);
         health.setPrefHeight(39);
         health.setPrefWidth(134);
-        health.getChildren().add(getLogo());
-        health.getChildren().add(getLogo());
-        health.getChildren().add(getLogo());
-        Label round = getLabel("ROUND", 30, 40);
+        // health.getChildren().add(getLogo());
+        // health.getChildren().add(getLogo());
+        // health.getChildren().add(getLogo());
+        roundLabel = getLabel("ROUND "+this.round, 30, 40);
         Label time = getLabel("TIME", 30, 109);
         this.timeLabel = getLabel("3:00", 30, 139);
-        box.getChildren().addAll(health,round,time,timeLabel);
+        box.getChildren().addAll(health,roundLabel,time,timeLabel);
         // startTimer();
     }
 
     private void bootMap(Map map) {
-        this.remainingTime = 180;
         if (this.map != null) {
             this.map.stopLoop();
             this.pane.getChildren().remove(this.map);
@@ -131,7 +169,7 @@ public class Engine {
             Platform.runLater(()->{
                 index.setLayoutX(100);
                 index.setLayoutY(100);
-                index.setStyle("-fx-text-fill: #ffffff;-fx-font-size: 60px");    
+                index.setStyle("-fx-text-fill: #ffffff;-fx-font-size: 100px");    
                 pane.getChildren().add(index);
             });
             for (startTime = 5;startTime>0;startTime--) {
@@ -147,7 +185,6 @@ public class Engine {
             Platform.runLater(()->{
                 pane.getChildren().remove(index);
             });
-            startTimer();
             startMap();
         }).start();
     }
@@ -157,6 +194,7 @@ public class Engine {
         ArrayList<Balloon> balloons = new ArrayList<>();
         balloons.addAll(this.map.collect(DragonBalloon.class));
         balloons.addAll(this.map.collect(NormalBalloon.class));
+        this.enemiesCount = balloons.size();
         Player player = this.map.collect(Player.class).get(0);
         for (Balloon balloon : balloons) {
             balloon.setTarget(player);
@@ -205,6 +243,8 @@ public class Engine {
                 new SerializedPersonDao("persons").update(person);
             }
         }
+        this.onGame = false;
+        map.stopLoop();
         Platform.runLater(()->{
             this.stage.close();
         });
@@ -216,18 +256,21 @@ public class Engine {
         res.setFitHeight(29);
         return res;
     }
-    private static void setPlayerHealth(int health) {
-
+    private void setPlayerHealth(int health) {
+        current.health.getChildren().clear();
         for (int i = 0;i<health;i++) {
-            increasePlayerHealth();
+            current.health.getChildren().add(current.getLogo());
+            // increasePlayerHealth();
         }
+        current.playerHealth = health;
     }
     public static void losePlayer() {
-        current.playerHealth--;
-        current.health.getChildren().clear();
-        for (int i = 0;i<current.playerHealth;i++) {
-            current.health.getChildren().add(current.getLogo());
-        }
+        // current.playerHealth--;
+        // current.health.getChildren().clear();
+        // for (int i = 0;i<current.playerHealth;i++) {
+        //     current.health.getChildren().add(current.getLogo());
+        // }
+        current.setPlayerHealth(current.playerHealth-1);
 
         if (current.playerHealth == 0) {
             current.finishGame();
@@ -235,8 +278,8 @@ public class Engine {
         current.map.resetSpawnPositions();
     }
     public static void increasePlayerHealth() {
-        current.playerHealth++;
-        current.health.getChildren().add(current.getLogo());
+        // current.playerHealth++;
+        current.setPlayerHealth(current.playerHealth+1);
     }
     public void setHiScore(int hiScore) {
         this.hiScore = hiScore;
@@ -248,7 +291,25 @@ public class Engine {
     public static void increaseScore(int score) {
         current.setHiScore(current.getHiScore()+score);
     }
-    public static void winedPlayer() {
-
+    public void winedPlayer() {
+        if (!this.arcade) {
+            finishGame();
+            return;
+        }
+        this.round++;
+        this.roundLabel.setText("ROUND "+round);
+        this.remainingTime = 180;
+        if (new File("src/main/resources/map/arcade/"+round+".map").exists()) {
+            bootMap(new MapSerializer("src/main/resources/map/arcade/"+round).load(CONSTRUCTORS, FILLERS, BLOCK_SCALE ,Color.BLACK));
+            firstStartGame();
+        } else {
+            finishGame();
+        }
+    }
+    public static void deadBalloon() {
+        current.enemiesCount--;
+        if (current.enemiesCount==0) {
+            current.winedPlayer();
+        }
     }
 }

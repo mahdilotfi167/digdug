@@ -1,6 +1,5 @@
 package ir.ac.kntu.models.random;
 
-import ir.ac.kntu.models.Player;
 import javafx.scene.image.ImageView;
 import static ir.ac.kntu.Constants.*;
 

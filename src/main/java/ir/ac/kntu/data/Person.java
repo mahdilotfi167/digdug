@@ -27,7 +27,7 @@ public class Person implements Serializable, Comparable<Person> {
 
     @Override
     public int compareTo(Person o) {
-        return this.hiScore-o.hiScore;
+        return o.hiScore-this.hiScore;
     }
 
     public int getTotalGames() {

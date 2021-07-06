@@ -27,6 +27,7 @@ public class Pump extends Object {
     private int counter;
     private int lenght;
     private int dir;
+    private boolean attached;
     // private Timeline shooter = new Timeline();
     public Pump(Map map) {
         super(map, 0,0, BLOCK_SCALE, BLOCK_SCALE,new ImageView(), 0);
@@ -52,6 +53,7 @@ public class Pump extends Object {
             this.active = true;
             circle.setVisible(true);
             this.dir=1;
+            attached = false;
             // shooter.play();
         }
         // this.setCurrentLayoutX(position.getX());
@@ -81,12 +83,13 @@ public class Pump extends Object {
     }
     @Override
     public void onCollision(GameObject collider) {
-        if (this.active) {
+        if (this.active && !attached) {
                 if (collider instanceof Balloon) {
                     Balloon b = (Balloon)collider;
                     b.inflate();
                     this.setDirection(getDirection().multiply(-1));
                     dir=-dir;
+                    attached = true;
                     // this.move(this.getDirection().multiply(-1));
                     // lenght+=dir;
                 }

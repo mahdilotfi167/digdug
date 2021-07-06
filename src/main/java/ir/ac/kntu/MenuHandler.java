@@ -157,7 +157,8 @@ public class MenuHandler {
         lv.setOnMouseClicked(new EventHandler<MouseEvent>(){
             @Override
             public void handle(MouseEvent e) {
-                new Engine(new MapSerializer("src/main/resources/map/arcade/1").load(CONSTRUCTORS, FILLERS, BLOCK_SCALE ,Color.BLACK));
+                new Engine(lv.getSelectionModel().getSelectedItem());
+                // new Engine(new MapSerializer("src/main/resources/map/arcade/1").load(CONSTRUCTORS, FILLERS, BLOCK_SCALE ,Color.BLACK));
             }
         });
         VBox box = new VBox();
