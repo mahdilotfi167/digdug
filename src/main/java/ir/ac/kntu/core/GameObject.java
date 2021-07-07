@@ -4,9 +4,10 @@ import ir.ac.kntu.core.rigidbody.Position;
 import ir.ac.kntu.core.rigidbody.Vector;
 import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
+
 /**
- * A simple Class for working on game objects in javafx games
- * for create your own gameobjects compatible with map model just inherit from this model
+ * A simple Class for working on game objects in javafx games for create your
+ * own gameobjects compatible with map model just inherit from this model
  */
 public abstract class GameObject extends Parent {
     private ImageView mask;
@@ -16,18 +17,26 @@ public abstract class GameObject extends Parent {
     private int height;
     private Map map;
     private int gridCode;
-/**
- * Create a new GameObject
- * @param map map that this gameobject should add on it
- * @param gridX x position that this object should stay on it
- * @param gridY y position that this object should stay on it
- * @param width width that this object mask render on it
- * @param height height that this object mask render on it
- * @param gridCode unique grid code for this object
- * @param mask mask for this object that shows on map
- * <p><b>notice :</b> for destroying side effect of this object on map just use 0 for grid code<p>
- * <p><b>notice :</b> for creating maskless gameobjects just use {@code new ImageView()} for mask argument<p>
- */
+
+    /**
+     * Create a new GameObject
+     * 
+     * @param map      map that this gameobject should add on it
+     * @param gridX    x position that this object should stay on it
+     * @param gridY    y position that this object should stay on it
+     * @param width    width that this object mask render on it
+     * @param height   height that this object mask render on it
+     * @param gridCode unique grid code for this object
+     * @param mask     mask for this object that shows on map
+     *                 <p>
+     *                 <b>notice :</b> for destroying side effect of this object on
+     *                 map just use 0 for grid code
+     *                 <p>
+     *                 <p>
+     *                 <b>notice :</b> for creating maskless gameobjects just use
+     *                 {@code new ImageView()} for mask argument
+     *                 <p>
+     */
     public GameObject(Map map, int gridX, int gridY, int width, int height, int gridCode, ImageView mask) {
         this.position = new Position(gridX, gridY);
         this.width = width;
@@ -36,12 +45,9 @@ public abstract class GameObject extends Parent {
         this.gridCode = gridCode;
         this.direction = new Vector(1, 0);
         this.mask = mask;
-        // this.mask.setLayoutX(0);
-        // this.mask.setLayoutY(0);
         this.mask.setFitWidth(width);
         this.mask.setFitHeight(height);
         getChildren().add(mask);
-
         position.addXListener((oldval, newval) -> {
             this.setLayoutX(getMap().gridToLayout(newval.intValue()));
             // this.mask.setLayoutX(0);
@@ -56,34 +62,58 @@ public abstract class GameObject extends Parent {
         this.position.setY(gridY);
     }
 
-    // protected void setX() {
-
-    // }
-
+    /**
+     * returns the curren x layout of this game object
+     * @return
+     */
     public double getCurrentLayoutX() {
         return getMap().gridToLayout((int) this.position.getX());
     }
 
+    /**
+     * returns the curren y layout of this game object
+     * @return
+     */
     public double getCurrentLayoutY() {
         return getMap().gridToLayout((int) this.position.getY());
     }
 
+    /**
+     * returns the center layout position of this gameobject
+     * @return
+     */
     public Position getCenterPos() {
         return new Position(getLayoutCenterX(), getLayoutCenterY());
     }
 
+    /**
+     * returns the center x layout of this gameobject
+     * @return
+     */
     public double getLayoutCenterX() {
         return this.getCurrentLayoutX() + width / 2;
     }
 
+    /**
+     * returns the center y layout of this gameobjcet
+     * @return
+     */
     public double getLayoutCenterY() {
         return this.getCurrentLayoutY() + height / 2;
     }
 
+    /**
+     * returns the grid x position of this gameobject
+     * @return
+     */
     public int getGridX() {
         return (int) position.getX();
     }
 
+    /**
+     * returns the grid y position of this gameobject
+     * @return
+     */
     public int getGridY() {
         return (int) position.getY();
     }
@@ -108,7 +138,7 @@ public abstract class GameObject extends Parent {
         return direction;
     }
 
-    public Position getPosition() {// todo return copy
+    public Position getPosition() {
         return position;
     }
 

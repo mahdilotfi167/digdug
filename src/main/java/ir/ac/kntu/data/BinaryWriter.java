@@ -9,14 +9,16 @@ import java.nio.IntBuffer;
 
 public class BinaryWriter {
     private String filename;
+
     public BinaryWriter(String filename) {
         this.filename = filename;
     }
+
     public int[] get() {
-        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(filename+".dat"))) {
-        IntBuffer buffer = ByteBuffer.wrap(in.readAllBytes()).asIntBuffer();
+        try (BufferedInputStream in = new BufferedInputStream(new FileInputStream(filename + ".dat"))) {
+            IntBuffer buffer = ByteBuffer.wrap(in.readAllBytes()).asIntBuffer();
             int[] res = new int[buffer.limit()];
-            for (int i = 0;i<res.length;i++) {
+            for (int i = 0; i < res.length; i++) {
                 res[i] = buffer.get(i);
             }
             return res;
@@ -25,8 +27,9 @@ public class BinaryWriter {
         }
         return null;
     }
+
     public void write(int[] input) {
-        try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(filename+".dat"))) {
+        try (BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(filename + ".dat"))) {
             for (int n : input) {
                 out.write(intToByte(n));
             }
@@ -34,6 +37,7 @@ public class BinaryWriter {
             e.printStackTrace();
         }
     }
+
     private static byte[] intToByte(int n) {
         return ByteBuffer.allocate(4).putInt(n).array();
     }

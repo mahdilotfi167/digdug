@@ -116,7 +116,7 @@ public class Balloon extends Sprite {
     private int queryFriends() {
         int count = 0;
         for (Balloon friend : friends) {
-            if (friend.state == State.FOLLOW) {
+            if (friend != this && friend.state == State.FOLLOW) {
                 count++;
             }
         }

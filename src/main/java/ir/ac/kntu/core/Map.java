@@ -23,6 +23,8 @@ public class Map extends Pane {
     private int blockScale;
     private GraphicsContext graphicsContext;
     private HashMap<GameObject,Position> spawnPositions;
+    private Set<java.util.Map.Entry<Integer,Color>> fillSet;
+    private Timeline collisionChecker;
 
     public Map(int[][] gridCodes,HashMap<Integer,GameObjectConstructor> constructors,HashMap<Integer,Color> fillers,int blockScale,Color background) {
         this.blockScale = blockScale;
@@ -39,8 +41,6 @@ public class Map extends Pane {
         graphicsContext.fillRect(0, 0, grid[0].length*blockScale, grid.length*blockScale);
         this.setPrefWidth(grid[0].length*blockScale);
         this.setPrefHeight(grid.length*blockScale);
-        
-        
         collisionChecker = new Timeline();
         collisionChecker.getKeyFrames().add(new KeyFrame(Duration.millis(40), e -> {
             for (int i = 0; i < pointers.size(); i++) {
@@ -56,12 +56,9 @@ public class Map extends Pane {
             }
         }));
         render();
-
-
     }
     
     private void render() {
-        GameObjectConstructor goc;
         GameObject gameObject;
         Color color;
         Set<java.util.Map.Entry<Integer,GameObjectConstructor>> eSet = this.constructors.entrySet();
@@ -73,14 +70,12 @@ public class Map extends Pane {
                     graphicsContext.fillRect(blockScale*j,blockScale*i,blockScale,blockScale);
                 }
                 //*gameobjects...
-                if ((goc = constructors.get(grid[i][j]))!= null) {
-                    for (java.util.Map.Entry<Integer,GameObjectConstructor> entry : eSet) {
-                        if ((entry.getKey() & grid[i][j]) != 0) {
-                            gameObject = entry.getValue().getObject(this, j, i);
-                            getChildren().add(gameObject);
-                            pointers.add(gameObject);
-                            spawnPositions.put(gameObject, new Position(gameObject.getPosition()));
-                        }
+                for (java.util.Map.Entry<Integer,GameObjectConstructor> entry : eSet) {
+                    if ((entry.getKey() & grid[i][j]) != 0) {
+                        gameObject = entry.getValue().getObject(this, j, i);
+                        getChildren().add(gameObject);
+                        pointers.add(gameObject);
+                        spawnPositions.put(gameObject, new Position(gameObject.getPosition()));
                     }
                 }
             }
@@ -91,23 +86,9 @@ public class Map extends Pane {
         return graphicsContext;
     }
     
-
-    public void updateObjectPos(GameObject gameObject , int oldX, int oldY) {
+    public void updateObjectPos(GameObject gameObject, int oldX, int oldY) {
         grid[oldY][oldX]-=gameObject.getGridCode();
         grid[gameObject.getGridY()][gameObject.getGridX()]+=gameObject.getGridCode();
-        // System.out.println(gameObject.getGridX() == oldX);
-        // System.out.println(gameObject.getGridY() == oldY);
-        // grid[oldY][oldX]-=10;
-        // System.out.println(gameObject.getGridCode() );
-        // System.out.println(oldX);
-        // System.out.println(oldY);
-        // graphicsContext.setFill(Color.BLUE);
-        // graphicsContext.fillRoundRect(gridToLayout(oldX),gridToLayout(oldY), gameObject.getWidth() , gameObject.getHeight(), 5, 5);
-        // pointers[oldY][oldX] = null;
-        // GameObject pastObject = pointers[gameObject.getGridY()][gameObject.getGridX()];
-        // getChildren().remove(pastObject);
-        // grid[gameObject.getGridY()][gameObject.getGridX()] = gameObject.getGridCode();
-        // pointers[gameObject.getGridY()][gameObject.getGridX()] = gameObject;
     }
 
     public void removeObject(GameObject gameObject) {
@@ -122,20 +103,13 @@ public class Map extends Pane {
         this.grid[y][x] = colorCode;//todo bug it's better +=
     }
 
-    
-    // public GameObject getObject(int x,int y) {
-    //     if (x<0 || y<0 || x >=grid[0].length || y>=grid.length) {
-    //         return null;
-    //     }
-    //     return pointers[y][x];
-    // }
-    
     public boolean isBlock(int x,int y) {
-        if (x<0||y<0||x>=grid[0].length||y>=grid.length) {
+        if (!contains(new Position(x,y))) {
             return true;
         }
         return this.fillers.get(grid[y][x])!=null;
     }
+
     public boolean isBlock(Position position) {
         return isBlock((int)position.getX(),(int)position.getY());
     }
@@ -147,7 +121,6 @@ public class Map extends Pane {
         return grid[(int)position.getY()][(int)position.getX()];
     }
 
-    private Set<java.util.Map.Entry<Integer,Color>> fillSet;//todo change to arrayList
     public void clearBlock(int x,int y) {
         for (java.util.Map.Entry<Integer,Color> entry : fillSet) {
             if ((grid[y][x] & entry.getKey()) != 0) {
@@ -181,21 +154,6 @@ public class Map extends Pane {
         return grid.length;
     }
 
-    public void printGrid() {
-        // for (int i = 0;i<grid.length;i++) {
-        //     for (int j = 0;j<grid[0].length;j++) {
-        //         System.out.print(grid[i][j]+" ");
-        //     }
-        //     System.out.println();
-        // }
-        for (int[] row : grid) {
-            for (int n : row) {
-                System.out.print(n+" ");
-            }
-            System.out.println();
-        }
-    }
-
     public <T> ArrayList<T> collect(Class<T> clazz) {
         ArrayList<T> res = new ArrayList<>();
         for (GameObject go : pointers) {
@@ -215,7 +173,6 @@ public class Map extends Pane {
         this.getChildren().add(go);
         this.grid[go.getGridY()][go.getGridX()] += go.getGridCode();
     }
-    private Timeline collisionChecker;
 
     public ArrayList<Position> getFreePoints() {
         ArrayList<Position> res = new ArrayList<>();
@@ -233,6 +190,7 @@ public class Map extends Pane {
         collisionChecker.setCycleCount(Timeline.INDEFINITE);
         collisionChecker.play();
     }
+
     public void stopLoop() {
         collisionChecker.stop();
     }

@@ -1,20 +1,8 @@
 package ir.ac.kntu.models;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.util.Duration;
-
 import static ir.ac.kntu.Constants.*;
-
-import java.util.Timer;
-import java.util.TimerTask;
-
-import ir.ac.kntu.ThreadPool;
 import ir.ac.kntu.core.GameObject;
 import ir.ac.kntu.core.Map;
 import ir.ac.kntu.core.rigidbody.Position;

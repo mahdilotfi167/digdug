@@ -12,19 +12,17 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import static ir.ac.kntu.Constants.*;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
-
 import ir.ac.kntu.core.GameObject;
 import ir.ac.kntu.core.GameObjectConstructor;
 import ir.ac.kntu.core.Map;
 import ir.ac.kntu.data.MapSerializer;
-import ir.ac.kntu.models.Draggable;
+import static ir.ac.kntu.Constants.*;
 
 public class MapBuilder extends Pane {
     private Map map;
@@ -33,13 +31,12 @@ public class MapBuilder extends Pane {
     private Pane pane;
     private int currentFiller = 0;
 
-
     public MapBuilder() {
         this.stage = new Stage();
         this.pane = new Pane();
         this.scene = new Scene(pane,900,627);
         this.stage.setScene(scene);
-        this.map = new Map(new int[20][25],CONSTRUCTORS , FILLERS, BLOCK_SCALE, Color.BLACK);
+        this.map = new Map(new int[20][25], CONSTRUCTORS, FILLERS, BLOCK_SCALE, Color.BLACK);
         this.pane.getChildren().add(map);
         drawPane();
         stage.show();
@@ -49,7 +46,7 @@ public class MapBuilder extends Pane {
                 if (map.isBlock(map.layoutToGrid(e.getX()), map.layoutToGrid(e.getY()))) {
                     map.clearBlock(map.layoutToGrid(e.getX()), map.layoutToGrid(e.getY()));
                 } else if (currentFiller != 0) {
-                    map.fill(currentFiller ,map.layoutToGrid(e.getX()), map.layoutToGrid(e.getY()));
+                    map.fill(currentFiller, map.layoutToGrid(e.getX()), map.layoutToGrid(e.getY()));
                 }
             }
         });
@@ -77,6 +74,7 @@ public class MapBuilder extends Pane {
             .map(filename->Integer.parseInt(filename.replaceAll(".map$", "")))
             .max(Integer::compareTo).get();
     }
+
     public void drawPane() {
         pane.setPrefWidth(900);
         pane.setPrefHeight(627);
@@ -93,7 +91,9 @@ public class MapBuilder extends Pane {
         for (java.util.Map.Entry<Integer,GameObjectConstructor> entry : CONSTRUCTORS.entrySet()) {
             Button btn = getButton(entry.getValue().getObject(this.map, 0, 0).getClass().getSimpleName(), e->{
                 GameObject draggable = new Draggable(entry.getValue().getObject(map, 12, 10));
-                draggable.getMask().addEventFilter(MouseEvent.MOUSE_PRESSED,event->{currentFiller = 0;});
+                draggable.getMask().addEventFilter(MouseEvent.MOUSE_PRESSED,event->{
+                    currentFiller = 0;
+                });
                 this.map.addObject(draggable);
                 currentFiller = 0;
             });
@@ -108,6 +108,7 @@ public class MapBuilder extends Pane {
             VBox.setMargin(btn, new Insets(2, 0, 2, 0));
         }
     }
+
     private Button getButton(String text,EventHandler<ActionEvent> handler) {
         Button btn = new Button();
         btn.setText(text);
