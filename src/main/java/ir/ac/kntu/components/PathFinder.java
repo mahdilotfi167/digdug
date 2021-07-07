@@ -2,6 +2,8 @@ package ir.ac.kntu.components;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.ListIterator;
 
 import ir.ac.kntu.core.Map;
@@ -9,6 +11,7 @@ import ir.ac.kntu.core.rigidbody.Position;
 import ir.ac.kntu.core.rigidbody.Vector;
 
 import java.util.Stack;
+import java.util.function.Predicate;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -118,6 +121,29 @@ public class PathFinder {
     // manhattan
     private double huristic(Position start, Position goal) {
         return Math.abs(start.getX() - goal.getX()) + Math.abs(start.getY() - goal.getY());
+    }
+
+    public Position bfs(Position origin,Predicate<Position> predicate) {
+        boolean[][] closed = new boolean[map.getGridHeight()][map.getGridWidth()];
+        LinkedList<Position> queue = new LinkedList<>();
+        queue.add(new Position(origin));
+        closed[(int)origin.getY()][(int)origin.getX()] = true;
+        Position current,neighbor;
+        while(!queue.isEmpty()) {
+            current = queue.poll();
+            closed[(int)current.getY()][(int)current.getX()] = true;
+            if (predicate.test(current)) {
+                return current;
+            }
+            for (Vector direction : directions) {
+                neighbor = current.sum(direction);
+                if (map.isBlock((int)neighbor.getX(), (int)neighbor.getY()) || closed[(int)neighbor.getY()][(int)neighbor.getX()]) {
+                    continue;
+                }
+                queue.add(neighbor);
+            }
+        }
+        return null;
     }
 
     private Position popBackMin(HashMap<Position, Double> costs, ArrayList<Position> list) {

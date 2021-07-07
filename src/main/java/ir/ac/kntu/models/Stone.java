@@ -41,11 +41,17 @@ public class Stone extends Object {
     }
     @Override
     public void onCollision(GameObject collider) {
-        if (falling) {
+        if (falling && deadCounter == 0) {
             if (collider instanceof Sprite) {
                 collider.setWidth(collider.getWidth()/2);
-                this.crushers.add((Sprite)collider);
+                if (!crushers.contains(collider)) {
+                    this.crushers.add((Sprite)collider);
+                }
             }
         }
+    }
+
+    public boolean getFalling() {
+        return this.falling;
     }
 }

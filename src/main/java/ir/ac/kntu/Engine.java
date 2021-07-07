@@ -1,9 +1,7 @@
 package ir.ac.kntu;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-
 import ir.ac.kntu.components.PlayerController;
 import ir.ac.kntu.core.Map;
 import ir.ac.kntu.data.BinaryWriter;
@@ -131,9 +129,6 @@ public class Engine {
         health.setAlignment(Pos.CENTER_LEFT);
         health.setPrefHeight(39);
         health.setPrefWidth(134);
-        // health.getChildren().add(getLogo());
-        // health.getChildren().add(getLogo());
-        // health.getChildren().add(getLogo());
         roundLabel = getLabel("ROUND "+this.round, 30, 40);
         Label time = getLabel("TIME", 30, 109);
         this.timeLabel = getLabel("3:00", 30, 139);

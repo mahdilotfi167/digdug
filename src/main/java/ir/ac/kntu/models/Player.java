@@ -28,7 +28,7 @@ public class Player extends Sprite {
     public Player(Map map, int gridX, int gridY) {
         super(map, gridX, gridY, BLOCK_SCALE,BLOCK_SCALE,new ImageView("/assets/player.png"),PLAYER_GRID_CODE);
         // this.speed = 2;
-        setSpeed(2);
+        setSpeed(3);
         // this.movation = new Timeline(new KeyFrame(Duration.millis(1000/speed), e->{
         //     setDirection(movement.getDirection());
         //     if ((getMap().getData(this.getPosition().sum(movement)) & STONE_GRID_CODE) == 0) {
