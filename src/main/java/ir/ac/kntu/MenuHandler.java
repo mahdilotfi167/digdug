@@ -32,12 +32,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import static ir.ac.kntu.Constants.*;
+
 public class MenuHandler {
     private Stage stage;
     private Scene scene;
     private PersonDao dao;
-    // private GridPane customMenu = new GridPane();
     private GridPane mainMenu = new GridPane();
+
     public MenuHandler(Stage stage) {
         this.dao = new SerializedPersonDao("persons");
         this.stage = stage;
@@ -45,6 +46,7 @@ public class MenuHandler {
         this.stage.setScene(this.scene);
         drawMainMenu();
     }
+
     private void drawMainMenu() {
         mainMenu = getMainGrid();
         this.scene.setRoot(mainMenu);
@@ -54,14 +56,19 @@ public class MenuHandler {
         img.setFitWidth(431);
         img.setPickOnBounds(true);
         img.setPreserveRatio(true);
-        Button arcade = getButton("Arcade", e->{drawArcadeMenu();});
-        Button custom = getButton("Custom", e->{drawBuildMenu();});
+        Button arcade = getButton("Arcade", e -> {
+            drawArcadeMenu();
+        });
+        Button custom = getButton("Custom", e -> {
+            drawBuildMenu();
+        });
         mainMenu.add(arcade, 1, 0);
         mainMenu.add(custom, 1, 1);
         mainMenu.add(img, 0, 1);
-        //*---------------------------
+        // *---------------------------
     }
-    private Button getButton(String text,EventHandler<ActionEvent> handler) {
+
+    private Button getButton(String text, EventHandler<ActionEvent> handler) {
         Button btn = new Button();
         btn.setText(text);
         btn.setMnemonicParsing(false);
@@ -71,6 +78,7 @@ public class MenuHandler {
         btn.setOnAction(handler);
         return btn;
     }
+
     private GridPane getMainGrid() {
         GridPane res = new GridPane();
         res.setPrefHeight(550);
@@ -105,6 +113,7 @@ public class MenuHandler {
         res.getRowConstraints().add(rc3);
         return res;
     }
+
     private GridPane getSubGrid() {
         GridPane res = new GridPane();
         res.setPrefHeight(550);
@@ -129,19 +138,19 @@ public class MenuHandler {
         res.getRowConstraints().add(rc1);
         return res;
     }
+
     private void drawArcadeMenu() {
         GridPane arcade = getSubGrid();
         this.scene.setRoot(arcade);
-        // ListView<Text> lv = new ListView<>();
         TableView<Person> lv = new TableView<>();
         lv.setPrefHeight(573);
         lv.setPrefWidth(337);
         lv.setStyle("-fx-background-color: #BECBDE;");
-        TableColumn<Person,String> tc1 = new TableColumn<>("Name");
+        TableColumn<Person, String> tc1 = new TableColumn<>("Name");
         tc1.setPrefWidth(223);
         tc1.setStyle("-fx-font-size: 18px;");
         tc1.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<Person,Integer> tc2 = new TableColumn<>("Record");
+        TableColumn<Person, Integer> tc2 = new TableColumn<>("Record");
         tc2.setPrefWidth(112);
         tc2.setStyle("-fx-font-size: 18px;");
         tc2.setCellValueFactory(new PropertyValueFactory<>("hiScore"));
@@ -150,11 +159,10 @@ public class MenuHandler {
         List<Person> persons = dao.all();
         Collections.sort(persons);
         lv.getItems().addAll(persons);
-        lv.setOnMouseClicked(new EventHandler<MouseEvent>(){
+        lv.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
                 new Engine(lv.getSelectionModel().getSelectedItem());
-                // new Engine(new MapSerializer("src/main/resources/map/arcade/1").load(CONSTRUCTORS, FILLERS, BLOCK_SCALE ,Color.BLACK));
             }
         });
         VBox box = new VBox();
@@ -163,33 +171,37 @@ public class MenuHandler {
         tf.setPrefWidth(297);
         tf.setPromptText("Enter name");
         tf.getStylesheets().add("/css/main.css");
-        Button add = getButton("Add", e->{
+        Button add = getButton("Add", e -> {
             Person p = new Person(tf.getText(), 0);
             saveNew(p);
             lv.getItems().add(p);
         });
-        Button back = getButton("Back", e->{drawMainMenu();});
+        Button back = getButton("Back", e -> {
+            drawMainMenu();
+        });
         box.setAlignment(Pos.CENTER);
         box.getChildren().add(tf);
         box.getChildren().add(add);
         box.getChildren().add(back);
-        VBox.setMargin(tf, new Insets(20,20, 20, 20));
+        VBox.setMargin(tf, new Insets(20, 20, 20, 20));
         VBox.setMargin(back, new Insets(20, 0, 20, 0));
         arcade.add(lv, 0, 0);
         arcade.add(box, 1, 0);
     }
+
     private void saveNew(Person person) {
         this.dao.add(person);
     }
+
     private List<Image> images;
     private List<String> filenumbers;
     private int imageIndex;
+
     private void drawBuildMenu() {
         filenumbers = getImages();
-        images = filenumbers.stream()
-        .map(filenumber->new Image("/map/custom/"+filenumber+".png"))//todo bug
-        .collect(Collectors.toList());
-        imageIndex = 100*images.size();
+        images = filenumbers.stream().map(filenumber -> new Image("/map/custom/" + filenumber + ".png"))// todo bug
+                .collect(Collectors.toList());
+        imageIndex = 100 * images.size();
         GridPane build = getSubGrid();
         this.scene.setRoot(build);
         VBox box1 = new VBox();
@@ -199,21 +211,29 @@ public class MenuHandler {
         img.setFitWidth(335);
         img.setPickOnBounds(true);
         img.setPreserveRatio(true);
-        img.setImage(images.get(imageIndex%images.size()));
-        Button next = getButton("Next", e->{img.setImage(images.get(++imageIndex%images.size()));});
-        Button prev = getButton("Prev", e->{img.setImage(images.get(--imageIndex%images.size()));});
+        img.setImage(images.get(imageIndex % images.size()));
+        Button next = getButton("Next", e -> {
+            img.setImage(images.get(++imageIndex % images.size()));
+        });
+        Button prev = getButton("Prev", e -> {
+            img.setImage(images.get(--imageIndex % images.size()));
+        });
         box1.getChildren().add(next);
         box1.getChildren().add(img);
         box1.getChildren().add(prev);
 
         VBox box2 = new VBox();
         box2.setAlignment(Pos.CENTER);
-        Button add = getButton("New map", e->{new MapBuilder();});
-        Button play = getButton("Play", e->{
-            new Engine(new MapSerializer("src/main/resources/map/custom/"+filenumbers.get(imageIndex%images.size())).load(CONSTRUCTORS, FILLERS, BLOCK_SCALE ,Color.BLACK));
-            // System.out.println(images.get(imageIndex%images.size()).getUrl());
+        Button add = getButton("New map", e -> {
+            new MapBuilder();
         });
-        Button back = getButton("Back", e->{drawMainMenu();});
+        Button play = getButton("Play", e -> {
+            new Engine(new MapSerializer("src/main/resources/map/custom/" + filenumbers.get(imageIndex % images.size()))
+                    .load(CONSTRUCTORS, FILLERS, BLOCK_SCALE, Color.BLACK));
+        });
+        Button back = getButton("Back", e -> {
+            drawMainMenu();
+        });
         box2.getChildren().add(add);
         box2.getChildren().add(play);
         box2.getChildren().add(back);
@@ -225,12 +245,10 @@ public class MenuHandler {
 
     private List<String> getImages() {
         File folder = new File("src/main/resources/map/custom/");
-        if (folder == null || folder.list()==null) {
+        if (folder == null || folder.list() == null) {
             return new ArrayList<>();
         }
-        return List.of(folder.list()).stream()
-            .filter(filename->filename.endsWith(".png"))
-            .map(filename->filename.replaceAll(".png", ""))
-            .collect(Collectors.toList());
+        return List.of(folder.list()).stream().filter(filename -> filename.endsWith(".png"))
+                .map(filename -> filename.replaceAll(".png", "")).collect(Collectors.toList());
     }
 }

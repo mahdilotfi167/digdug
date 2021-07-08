@@ -5,7 +5,6 @@ import ir.ac.kntu.core.Map;
 import ir.ac.kntu.models.Object;
 import ir.ac.kntu.models.Player;
 import javafx.scene.image.ImageView;
-
 import static ir.ac.kntu.Constants.*;
 
 public class Fire extends Object {

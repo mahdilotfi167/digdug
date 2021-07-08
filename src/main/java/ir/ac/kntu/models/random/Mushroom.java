@@ -10,12 +10,13 @@ public class Mushroom extends RandomObject {
     public Mushroom(Map map, int gridX, int gridY) {
         super(map, gridX, gridY, new ImageView("/assets/mushroom.png"));
     }
+
     @Override
     public void onCollision(GameObject collider) {
         if (collider instanceof Player) {
             getMap().removeObject(this);
-            Player p = (Player)collider;
-            p.setSpeed(p.getSpeed()*1.5);
+            Player p = (Player) collider;
+            p.setSpeed(p.getSpeed() * 1.5);
         }
     }
 }

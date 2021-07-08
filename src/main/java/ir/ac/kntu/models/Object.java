@@ -21,5 +21,4 @@ public class Object extends GameObject {
         }
         super.setDirection(direction);
     }
-
 }

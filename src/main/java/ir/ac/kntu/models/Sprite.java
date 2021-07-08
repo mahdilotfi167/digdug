@@ -9,7 +9,7 @@ import javafx.util.Duration;
 
 public class Sprite extends GameObject {
 
-    SpriteRenderer spriteRenderer;
+    private SpriteRenderer spriteRenderer;
 
     public Sprite(Map map, int gridX, int gridY, int width, int height, ImageView spriteSheet, int gridCode) {
         super(map, gridX, gridY, width, height, gridCode, spriteSheet);
@@ -21,17 +21,10 @@ public class Sprite extends GameObject {
 
     @Override
     public void move(Vector movement) {
-        // if (movement.getX() < 0) {
-        //     getMask().setScaleX(-1);
-        //     getMask().setRotate(0);
-        // } else {
-        //     getMask().setScaleX(1);
-        //     getMask().setRotate(movement.getRotation());
-        // }
-        // setDirection(movement.getDirection());
         super.move(movement);
         spriteRenderer.play();
     }
+
     public SpriteRenderer getSpriteRenderer() {
         return spriteRenderer;
     }
@@ -47,9 +40,10 @@ public class Sprite extends GameObject {
         }
         super.setDirection(direction);
     }
-/**
- * kill method that calls by other gameobject that may kill this sprite
- */
+
+    /**
+     * kill method that calls by other gameobject that may kill this sprite
+     */
     public void kill() {
         getMap().removeObject(this);
     }
