@@ -18,7 +18,7 @@ it can be found in [/src/main/resources/assets](https://git.ce.kntu.ac.ir/ap/hom
 
 ## Main Map
 
-<div align=center> ![main map image](/images/main_map.png) </div>
+<div align=center> ![main map image](/images/game_play.png) </div>
 
 # Presention Video
 
