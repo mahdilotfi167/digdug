@@ -129,7 +129,14 @@ public class Map extends Pane {
         return grid[(int)position.getY()][(int)position.getX()];
     }
 
+    public void clearBlock(Position position) {
+        clearBlock((int)position.getX(),(int)position.getY());
+    }
+
     public void clearBlock(int x,int y) {
+        if (!contains(new Position(x, y))) {
+            return;
+        }
         for (java.util.Map.Entry<Integer,Color> entry : fillSet) {
             if ((grid[y][x] & entry.getKey()) != 0) {
                 grid[y][x] -= entry.getKey();
@@ -165,7 +172,7 @@ public class Map extends Pane {
     public <T> ArrayList<T> collect(Class<T> clazz) {
         ArrayList<T> res = new ArrayList<>();
         for (GameObject go : pointers) {
-            if (go != null && go.getClass() == clazz) {
+            if (go != null && clazz.isAssignableFrom(go.getClass())) {
                 res.add((T) go);
             }
         }

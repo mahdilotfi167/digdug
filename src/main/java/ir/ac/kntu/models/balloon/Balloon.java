@@ -42,9 +42,7 @@ public class Balloon extends Sprite {
     public void update() {
         if (counter++ % cycle == 0) {
             if (friends == null) {//* collecting friends in first time
-                friends = new ArrayList<>();
-                friends.addAll(getMap().collect(DragonBalloon.class));
-                friends.addAll(getMap().collect(NormalBalloon.class));
+                friends = getMap().collect(Balloon.class);
             }
 
             if (inflateOrder > 0) {
@@ -129,11 +127,11 @@ public class Balloon extends Sprite {
 
     @Override
     public void move(Vector movement) {
-        super.move(movement);
         if (this.getPosition().equals(out)) {
             Engine.losePlayer();
             this.kill();
         }
+        super.move(movement);
     }
 
     private void follow() {

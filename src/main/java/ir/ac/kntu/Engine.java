@@ -11,6 +11,7 @@ import ir.ac.kntu.data.SerializedPersonDao;
 import ir.ac.kntu.models.Player;
 import ir.ac.kntu.models.balloon.Balloon;
 import ir.ac.kntu.models.balloon.DragonBalloon;
+import ir.ac.kntu.models.balloon.ExplosiveBalloon;
 import ir.ac.kntu.models.balloon.NormalBalloon;
 import ir.ac.kntu.models.random.RandomCreator;
 import javafx.application.Platform;
@@ -194,9 +195,7 @@ public class Engine {
     private RandomCreator rc;
 
     private void startMap() {// * after 5 seconds .........................
-        ArrayList<Balloon> balloons = new ArrayList<>();
-        balloons.addAll(this.map.collect(DragonBalloon.class));
-        balloons.addAll(this.map.collect(NormalBalloon.class));
+        ArrayList<Balloon> balloons = this.map.collect(Balloon.class);
         this.enemiesCount = balloons.size();
         Player player = this.map.collect(Player.class).get(0);
         for (Balloon balloon : balloons) {
