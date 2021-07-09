@@ -49,9 +49,9 @@ public class Engine {
     public Engine(Person person) {
         this.person = person;
         current = this;
-        this.remainingTime = 180;
+        this.remainingTime = GAME_TIME;
         this.round = 1;
-        this.playerHealth = 3;
+        this.playerHealth = PLAYER_HEALTH;
 
         drawPane();
 
@@ -94,8 +94,8 @@ public class Engine {
     public Engine(Map map) {
         current = this;
         drawPane();
-        this.remainingTime = 180;
-        setPlayerHealth(3);
+        this.remainingTime = GAME_TIME;
+        setPlayerHealth(PLAYER_HEALTH);
         arcade = false;
         onGame = true;
         stage.setOnCloseRequest(e -> {
@@ -305,7 +305,7 @@ public class Engine {
         }
         this.round++;
         this.roundLabel.setText("ROUND " + round);
-        this.remainingTime = 180;
+        this.remainingTime = GAME_TIME;
         if (new File("src/main/resources/map/arcade/" + round + ".map").exists()) {
             bootMap(new MapSerializer("src/main/resources/map/arcade/" + round).load(CONSTRUCTORS, FILLERS, BLOCK_SCALE,
                     Color.BLACK));

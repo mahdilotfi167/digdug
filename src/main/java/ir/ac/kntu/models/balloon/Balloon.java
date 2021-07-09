@@ -102,6 +102,10 @@ public class Balloon extends Sprite {
         if (collider instanceof Player) {
             ((Player) collider).kill();
         }
+        if (collider instanceof Balloon) { //! balloons collision
+            this.counter = cycle+1;
+            ((Balloon)collider).counter = 0;
+        }
     }
 
     private int queryFriends() {

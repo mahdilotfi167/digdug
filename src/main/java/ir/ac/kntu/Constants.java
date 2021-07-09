@@ -38,5 +38,8 @@ public class Constants {
         FILLERS.put(ORANGE_WALL_GRID_CODE, Color.rgb(255, 171, 25));
     }
 
+    final public static int GAME_TIME = 180;
+    final public static int PLAYER_HEALTH = 3;
+
     final public static int PUMP_GRID_CODE = 9;
 }
