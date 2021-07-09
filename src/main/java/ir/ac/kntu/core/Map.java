@@ -43,19 +43,27 @@ public class Map extends Pane {
         this.setPrefHeight(grid.length*blockScale);
         collisionChecker = new Timeline();
         collisionChecker.getKeyFrames().add(new KeyFrame(Duration.millis(40), e -> {
-            for (int i = 0; i < pointers.size(); i++) {
-                for (int j = i+1; j < pointers.size(); j++) {
-                    if (pointers.get(i).getPosition().equals(pointers.get(j).getPosition())) {
-                        pointers.get(i).onCollision(pointers.get(j));
-                        pointers.get(j).onCollision(pointers.get(i));
-                    }
-                }
-            }
-            for (int i = 0;i < pointers.size(); i++) {
-                pointers.get(i).update();
-            }
+            collisionCheck();
+            update();
         }));
         render();
+    }
+
+    private synchronized void collisionCheck() {
+        for (int i = 0; i < pointers.size(); i++) {
+            for (int j = i + 1; j < pointers.size(); j++) {
+                if (pointers.get(i).getPosition().equals(pointers.get(j).getPosition())) {
+                    pointers.get(i).onCollision(pointers.get(j));
+                    pointers.get(j).onCollision(pointers.get(i));
+                }
+            }
+        }
+    }
+
+    private synchronized void update() {
+        for (int i = 0;i < pointers.size(); i++) {
+            pointers.get(i).update();
+        }
     }
     
     private void render() {
@@ -91,7 +99,7 @@ public class Map extends Pane {
         grid[gameObject.getGridY()][gameObject.getGridX()]+=gameObject.getGridCode();
     }
 
-    public void removeObject(GameObject gameObject) {
+    public synchronized void removeObject(GameObject gameObject) {
         this.pointers.remove(gameObject);
         this.getChildren().remove(gameObject);
         grid[gameObject.getGridY()][gameObject.getGridX()]-=gameObject.getGridCode();
