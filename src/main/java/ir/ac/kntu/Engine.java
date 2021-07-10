@@ -10,15 +10,15 @@ import ir.ac.kntu.data.Person;
 import ir.ac.kntu.data.SerializedPersonDao;
 import ir.ac.kntu.models.Player;
 import ir.ac.kntu.models.balloon.Balloon;
-import ir.ac.kntu.models.balloon.DragonBalloon;
-import ir.ac.kntu.models.balloon.ExplosiveBalloon;
-import ir.ac.kntu.models.balloon.NormalBalloon;
 import ir.ac.kntu.models.random.RandomCreator;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -237,7 +237,9 @@ public class Engine {
                     e.printStackTrace();
                 }
             }
-            finishGame();
+            if (onGame) {
+                finishGame();
+            }
         });
         timerThread.start();
     }
@@ -252,6 +254,12 @@ public class Engine {
         this.onGame = false;
         map.stopLoop();
         Platform.runLater(() -> {
+            ButtonType btn = new ButtonType("OK",ButtonData.OK_DONE);
+            Dialog<String> dialog = new Dialog<>();
+            dialog.setTitle("Results !");
+            dialog.setContentText("HiScore : "+this.hiScore);
+            dialog.getDialogPane().getButtonTypes().add(btn);
+            dialog.showAndWait();
             this.stage.close();
         });
     }

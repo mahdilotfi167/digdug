@@ -3,15 +3,12 @@ package ir.ac.kntu.core;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import org.checkerframework.checker.units.qual.C;
 import org.junit.Test;
-
 import ir.ac.kntu.core.rigidbody.Position;
 import javafx.scene.paint.Color;
+
 public class MapTest {
     public Map getMap() {
         HashMap<Integer,GameObjectConstructor> cons = new HashMap<>();

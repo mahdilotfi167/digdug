@@ -8,9 +8,9 @@ public class JavaFxApplication extends Application {
     }
 
     public void start(Stage stage) throws Exception {
-        //*========================================
+        //*====================================|
         MenuHandler mh = new MenuHandler(stage);
-        //*========================================
+        //*====================================|
         // Setting stage properties
         // stage.initStyle(StageStyle.UTILITY);
         stage.setTitle("DigDig");
