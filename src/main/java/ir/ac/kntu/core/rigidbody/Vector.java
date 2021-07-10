@@ -103,6 +103,15 @@ public class Vector {
         return "("+this.x+","+this.y+")";
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Vector) {
+            Vector other = (Vector)obj;
+            return this.x==other.x && this.y==other.y;
+        }
+        return false;
+    }
+
     public static Vector sum(Vector v1,Vector v2) {
         return new Vector(v1.x+v2.x, v1.y+v2.y);
     }

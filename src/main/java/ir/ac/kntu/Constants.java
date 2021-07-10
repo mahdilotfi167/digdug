@@ -29,6 +29,8 @@ public class Constants {
 
     final public static HashMap<Integer,GameObjectConstructor> CONSTRUCTORS = new HashMap<>();
     final public static HashMap<Integer,Color> FILLERS = new HashMap<>();
+    final public static Color BACKGROUND = Color.BLACK;
+
     static {
         CONSTRUCTORS.put(PLAYER_GRID_CODE, Player::new);
         CONSTRUCTORS.put(NORMAL_BALLOON_GRID_CODE, NormalBalloon::new);
