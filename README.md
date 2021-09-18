@@ -7,32 +7,13 @@
     K. N. Toosi University of Technology Spring 1400 <br>
 </p>
 
-# Documentation
-
-https://docs.google.com/document/d/1sRZWx74Wv9uExkHxA1qOGtpuAseKRUzgPfWXWvjbSi0/edit?usp=sharing
-
-# Assests
-
-You can use these to create graphical components.
-it can be found in [/src/main/resources/assets](https://git.ce.kntu.ac.ir/ap/homeworks/projects/p4-digdug/-/tree/master/src/main/resources/assets) directory
-
 ## Main Map
 
 <div align=center> ![main map image](/images/game_play.png) </div>
 
 # Presention Video
 
-<ul>
-    <li> Present your project in a 10 minutes video. </li>
-    <li> Upload it on a website (aparat, google drive and etc.</li>
-    <li> Edit README.md and add your presentaion link below. (instead of ``YOUR_VIDEO_URL``)</li>
-</ul>
-
 [Project Description](https://drive.google.com/file/d/1pVHd6vOuABHsSp1Yyli5V137IIYeQMJj/view?usp=drivesdk)
-
-# Images
-
-take screenshots from the outputs of your program and save it as images or gif into the images
 
 # JavaFx 11
 
@@ -41,8 +22,8 @@ take screenshots from the outputs of your program and save it as images or gif i
 clone in your computer:
 
 ```
-git clone <YOUR_REPO_URL>
-cd YOUR_REPO_URL
+git clone https://github.com/mahdilotfi167/digdug.git
+cd digdug
 ```
 
 </li>
@@ -64,14 +45,4 @@ mvn clean test
 
 </li>
 
-<li>
-<p> push your change to the repository: </p>
-
-```
-git add .
-git commit -m "commit message"
-git push
-```
-
-</li>
 </ul>
